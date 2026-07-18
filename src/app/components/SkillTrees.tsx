@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "motion/react";
 import { Icon } from "@iconify/react";
 
@@ -209,8 +209,81 @@ function ConstellationFigure({
   const fx = focusPerk ? focusPerk.x : 50;
   const fy = focusPerk ? focusPerk.y : 50;
 
+  // DOM container ref to mutate elements directly outside React render cycles
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let frameId: number;
+    const startTime = performance.now();
+
+    const update = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const t = (performance.now() - startTime) / 1000;
+
+      // Select nodes directly
+      const starEls = container.querySelectorAll<HTMLDivElement>("[data-star-idx]");
+      const lineEls = container.querySelectorAll<SVGLineElement>("[data-edge-a]");
+
+      // Calculate new offsets at 60fps
+      const offsets = constellation.perks.map((_, i) => {
+        const freqX = 0.4 + (i % 3) * 0.15;
+        const freqY = 0.45 + ((i + 1) % 3) * 0.15;
+        const phaseX = i * 1.3;
+        const phaseY = i * 1.9;
+        const amp = 1.0;
+
+        return {
+          x: Math.sin(t * freqX + phaseX) * amp,
+          y: Math.cos(t * freqY + phaseY) * amp,
+        };
+      });
+
+      // Update star positions on the DOM
+      starEls.forEach((el) => {
+        const idxAttr = el.getAttribute("data-star-idx");
+        if (idxAttr === null) return;
+        const idx = parseInt(idxAttr, 10);
+        const perk = constellation.perks[idx];
+        const offset = offsets[idx];
+        if (perk && offset) {
+          el.style.left = `${perk.x + offset.x}%`;
+          el.style.top = `${perk.y + offset.y}%`;
+        }
+      });
+
+      // Update connecting SVG lines on the DOM
+      lineEls.forEach((el) => {
+        const aAttr = el.getAttribute("data-edge-a");
+        const bAttr = el.getAttribute("data-edge-b");
+        if (aAttr === null || bAttr === null) return;
+        const a = parseInt(aAttr, 10);
+        const b = parseInt(bAttr, 10);
+
+        const p1 = constellation.perks[a];
+        const p2 = constellation.perks[b];
+        const o1 = offsets[a];
+        const o2 = offsets[b];
+
+        if (p1 && p2 && o1 && o2) {
+          el.setAttribute("x1", (p1.x + o1.x).toFixed(3));
+          el.setAttribute("y1", (p1.y + o1.y).toFixed(3));
+          el.setAttribute("x2", (p2.x + o2.x).toFixed(3));
+          el.setAttribute("y2", (p2.y + o2.y).toFixed(3));
+        }
+      });
+
+      frameId = requestAnimationFrame(update);
+    };
+
+    frameId = requestAnimationFrame(update);
+    return () => cancelAnimationFrame(frameId);
+  }, [constellation]);
+
   return (
     <div
+      ref={containerRef}
       className="absolute inset-0 pointer-events-none"
       style={{
         transform: `translate(${50 - zoom * fx}%, ${50 - zoom * fy}%) scale(${zoom})`,
@@ -232,6 +305,8 @@ function ConstellationFigure({
           return (
             <line
               key={edgeIdx}
+              data-edge-a={a}
+              data-edge-b={b}
               x1={p1.x} y1={p1.y}
               x2={p2.x} y2={p2.y}
               stroke={lit ? "#8b8b8b" : "#3a3b3f"}
@@ -253,6 +328,7 @@ function ConstellationFigure({
         return (
           <div
             key={perk.name}
+            data-star-idx={i}
             className="absolute pointer-events-auto cursor-pointer"
             style={{
               left: `${perk.x}%`,
@@ -272,11 +348,6 @@ function ConstellationFigure({
           >
             <div
               className="relative flex items-center justify-center pointer-events-none"
-              style={{
-                animation: `starFloat-${i % 4} ${6 + (i % 3) * 1.5}s ease-in-out infinite`,
-                animationDelay: `${(i % 5) * 0.3}s`,
-                willChange: "transform",
-              }}
             >
               {/* Hit target */}
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-auto" style={{ width: 100, height: 100 }} />

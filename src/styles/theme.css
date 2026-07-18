@@ -129,6 +129,42 @@
   }
 }
 
+/* ─── Custom themed scrollbar ─────────────────────────────────────────────── */
+/* Applies to all scrollable elements. Matches the dark, minimal RPG aesthetic. */
+
+/* Firefox */
+* {
+  scrollbar-color: #2a2a34 #0c0c0e;
+  scrollbar-width: thin;
+}
+
+/* Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0c;
+  border-left: 1px solid #141418;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #252530;
+  border-radius: 0;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3a3a46;
+  box-shadow: 0 0 6px rgba(232, 230, 227, 0.08);
+}
+
+::-webkit-scrollbar-corner {
+  background: #0a0a0c;
+}
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
