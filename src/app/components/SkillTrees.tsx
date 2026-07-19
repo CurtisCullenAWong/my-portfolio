@@ -2,131 +2,7 @@ import React, { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "motion/react";
 import { Icon } from "@iconify/react";
 
-type Perk = {
-  name: string;
-  desc: string;
-  x: number;
-  y: number;
-  major?: boolean;
-  icon: string;
-};
-
-type Constellation = {
-  category: string;
-  subtitle: string;
-  perks: Perk[];
-  edges: [number, number][];
-};
-
-// ─── The Scholar — Languages ─────────────────────────────────────────────────
-// Star layout traces the </> code-bracket symbol.
-//
-//   0           5
-//    \         /
-//  1  8───────9  6
-//    /         \
-//   2           7
-//     \       /
-//      3   4
-//       \ /
-//        (slash)
-//
-const constellations: Constellation[] = [
-  // ─── The Architect — Frameworks ──────────────────────────────────────────
-  // Stars at the six vertices of a regular hexagon + one centre node;
-  // alternating spokes echo the React atom / wheel-of-frameworks motif.
-  {
-    category: "The Architect",
-    subtitle: "Frameworks",
-    perks: [
-      { name: "React.js", desc: "A component-based JavaScript library for building interactive user interfaces.", x: 50, y: 50, major: true, icon: "simple-icons:react" },
-      { name: "Next.js", desc: "A production-ready React framework for server-side rendering and edge routing.", x: 50, y: 8, icon: "simple-icons:nextdotjs" },
-      { name: "React Native", desc: "A cross-platform mobile framework for building native applications using React.", x: 84, y: 29, icon: "simple-icons:react" },
-      { name: "Flutter", desc: "Google's open-source UI toolkit for building natively compiled multi-platform applications.", x: 84, y: 71, icon: "simple-icons:flutter" },
-      { name: "Tauri", desc: "A framework for building lightweight, secure desktop apps using web tech and Rust.", x: 50, y: 92, icon: "simple-icons:tauri" },
-      { name: "Tailwind CSS", desc: "A utility-first CSS framework designed for rapid and customizable user interface styling.", x: 16, y: 71, icon: "simple-icons:tailwindcss" },
-      { name: "Laravel", desc: "A PHP web application framework with expressive, elegant MVC-based architecture.", x: 16, y: 29, icon: "simple-icons:laravel" },
-    ],
-    edges: [
-      [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 1], // outer hexagon ring
-      [0, 1], [0, 3], [0, 5],                           // alternating spokes from centre
-    ],
-  },
-  {
-    category: "The Scholar",
-    subtitle: "Languages",
-    perks: [
-      // < bracket (left side)
-      { name: "JavaScript", desc: "The core dynamic scripting language of the web powering client and server development.", x: 18, y: 22, icon: "simple-icons:javascript" },
-      { name: "HTML5", desc: "The standard markup language specifying the structure and layout of web pages.", x: 6, y: 50, major: true, icon: "simple-icons:html5" },
-      { name: "CSS3", desc: "The design language used to style layouts and build responsive visual interfaces.", x: 18, y: 78, icon: "simple-icons:css" },
-      // / slash
-      { name: "TypeScript", desc: "A strongly typed superset of JavaScript adding compile-time safety and structure.", x: 38, y: 82, icon: "simple-icons:typescript" },
-      { name: "Dart", desc: "A client-optimized, object-oriented language optimized for fast multi-platform Flutter apps.", x: 62, y: 18, icon: "simple-icons:dart" },
-      // > bracket (right side)
-      { name: "SQL", desc: "The standard domain-specific language for managing and querying relational databases.", x: 82, y: 22, icon: "simple-icons:sqlite" },
-      { name: "PHP", desc: "A versatile server-side scripting language popular for web backends and templating.", x: 94, y: 50, major: true, icon: "simple-icons:php" },
-      { name: "Python", desc: "A general-purpose programming language popular for clean syntax, automation, and AI.", x: 82, y: 78, icon: "simple-icons:python" },
-      // centre dots bridging the two vertices
-      { name: "Java", desc: "A robust, object-oriented programming language designed for platform-independent applications.", x: 42, y: 50, icon: "ri:java-fill" },
-      { name: "Rust", desc: "A modern systems programming language focused on memory safety, concurrency, and performance.", x: 58, y: 50, icon: "simple-icons:rust" },
-    ],
-    edges: [
-      [0, 1], [1, 2],           // left <
-      [3, 4],                    // slash /
-      [5, 6], [6, 7],           // right >
-      [2, 3], [4, 5],           // connect bracket tips to slash ends
-      [1, 8], [8, 9], [9, 6],  // horizontal bridge through centre
-    ],
-  },
-
-
-  // ─── The Sentinel — Cloud & Databases ────────────────────────────────────
-  // Stars outline a cloud silhouette: three bumps across the top, wide body
-  // tapering to a flat base.
-  {
-    category: "The Sentinel",
-    subtitle: "Cloud & Databases",
-    perks: [
-      { name: "Firebase", desc: "A backend platform providing realtime databases, user authentication, and hosting solutions.", x: 50, y: 10, major: true, icon: "simple-icons:firebase" },
-      { name: "MongoDB", desc: "A popular schema-free NoSQL document database optimized for scalability and flexibility.", x: 22, y: 26, icon: "simple-icons:mongodb" },
-      { name: "MySQL", desc: "An open-source relational database management system using structured query language.", x: 78, y: 26, icon: "simple-icons:mysql" },
-      { name: "Docker", desc: "A platform used to deploy, configure, and isolate web applications inside lightweight containers.", x: 12, y: 54, icon: "simple-icons:docker" },
-      { name: "Google Cloud", desc: "A suite of modular cloud computing, hosting, container registry, and data analytics services.", x: 88, y: 54, icon: "simple-icons:googlecloud" },
-      { name: "Supabase", desc: "An open-source Firebase alternative providing a postgres database, auth, and auto-generated APIs.", x: 30, y: 78, icon: "simple-icons:supabase" },
-      { name: "Vercel", desc: "A cloud platform optimized for deploying modern frontend applications and serverless endpoints.", x: 70, y: 78, icon: "simple-icons:vercel" },
-    ],
-    edges: [
-      [0, 1], [0, 2],           // peak to upper shoulders
-      [1, 3], [2, 4],           // shoulders to outer flanks
-      [3, 5], [4, 6],           // flanks down to base
-      [5, 6],                    // flat base
-      [1, 2],                    // upper cross-brace
-    ],
-  },
-
-  // ─── The Artificer — Developer Tools ─────────────────────────────────────
-  // Eight stars equally spaced on a circle form a gear / octagon; four
-  // skip-one diagonals add the cross-brace of a cog wheel.
-  {
-    category: "The Artificer",
-    subtitle: "Developer Tools",
-    perks: [
-      { name: "Git / GitHub", desc: "The standard distributed version control workflow and web-based code collaboration platform.", x: 50, y: 8, major: true, icon: "simple-icons:github" },
-      { name: "VS Code", desc: "A lightweight, powerful, and highly extensible code editor developed by Microsoft.", x: 82, y: 20, icon: "simple-icons:visualstudiocode" },
-      { name: "Android Studio", desc: "The official Integrated Development Environment specifically tailored for Android development.", x: 92, y: 50, icon: "simple-icons:androidstudio" },
-      { name: "NetBeans", desc: "An open-source extensible development framework and IDE primarily built for Java application suites.", x: 82, y: 80, icon: "simple-icons:apachenetbeanside" },
-      { name: "XAMPP", desc: "An easy-to-install local server distribution combining Apache, MariaDB, PHP, and Perl packages.", x: 50, y: 92, icon: "simple-icons:xampp" },
-      { name: "Agentic AI Workflows", desc: "The design of autonomous, goal-oriented AI agent systems using large language models.", x: 18, y: 80, icon: "simple-icons:openai" },
-      { name: "Figma", desc: "A collaborative web-based prototyping and interface design application for UX/UI designers.", x: 8, y: 50, icon: "simple-icons:figma" },
-      { name: "Adobe Suite", desc: "A suite of professional creative software for graphic design, asset editing, and animation workflows.", x: 18, y: 20, icon: "simple-icons:adobe" },
-    ],
-    edges: [
-      [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 0], // outer ring
-      [0, 2], [2, 4], [4, 6], [6, 0],                                   // cross diagonals
-    ],
-  },
-];
+import { Constellation, constellations } from "../../data/portfolioData";
 
 interface Star {
   id: number;
@@ -352,109 +228,109 @@ function ConstellationFigure({
               {/* Hit target */}
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full pointer-events-auto" style={{ width: 100, height: 100 }} />
 
-            {/* Outer halo glow */}
-            <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300"
-              style={{
-                width: perk.major ? 96 : 72,
-                height: perk.major ? 96 : 72,
-                background: "radial-gradient(circle, rgba(232,230,227,0.18) 0%, rgba(232,230,227,0) 70%)",
-                opacity: showModal ? 1 : perk.major ? 0.75 : 0.4,
-              }}
-            />
+              {/* Outer halo glow */}
+              <div
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300"
+                style={{
+                  width: perk.major ? 96 : 72,
+                  height: perk.major ? 96 : 72,
+                  background: "radial-gradient(circle, rgba(232,230,227,0.18) 0%, rgba(232,230,227,0) 70%)",
+                  opacity: showModal ? 1 : perk.major ? 0.75 : 0.4,
+                }}
+              />
 
-            {/* Star body — disc that holds the icon */}
-            <div
-              className="relative flex items-center justify-center rounded-full transition-all duration-300"
-              style={{
-                width: perk.major ? 44 : 32,
-                height: perk.major ? 44 : 32,
-                background: showModal
-                  ? "radial-gradient(circle at 40% 35%, #f0ede8, #b8b5b0)"
-                  : "radial-gradient(circle at 40% 35%, #d4d1cc, #6e6c69)",
-                boxShadow: showModal
-                  ? "0 0 16px 4px rgba(232,230,227,0.5), inset 0 1px 2px rgba(255,255,255,0.35)"
-                  : isPinned
-                    ? "0 0 10px 3px rgba(232,230,227,0.28)"
-                    : "inset 0 1px 1px rgba(255,255,255,0.18)",
-                transform: showModal ? "scale(1.35)" : "scale(1)",
-              }}
-            >
-              {/* Icon — fades in smoothly */}
-              <motion.div
-                animate={{ opacity: showModal ? 1 : perk.major ? 0.65 : 0.45, scale: showModal ? 1 : 0.9 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-                className="flex items-center justify-center"
+              {/* Star body — disc that holds the icon */}
+              <div
+                className="relative flex items-center justify-center rounded-full transition-all duration-300"
+                style={{
+                  width: perk.major ? 44 : 32,
+                  height: perk.major ? 44 : 32,
+                  background: showModal
+                    ? "radial-gradient(circle at 40% 35%, #f0ede8, #b8b5b0)"
+                    : "radial-gradient(circle at 40% 35%, #d4d1cc, #6e6c69)",
+                  boxShadow: showModal
+                    ? "0 0 16px 4px rgba(232,230,227,0.5), inset 0 1px 2px rgba(255,255,255,0.35)"
+                    : isPinned
+                      ? "0 0 10px 3px rgba(232,230,227,0.28)"
+                      : "inset 0 1px 1px rgba(255,255,255,0.18)",
+                  transform: showModal ? "scale(1.35)" : "scale(1)",
+                }}
               >
-                <Icon
-                  icon={perk.icon}
-                  width={perk.major ? 28 : 20}
-                  height={perk.major ? 28 : 20}
-                  className="text-[#0c0d0f]"
-                />
-              </motion.div>
-            </div>
+                {/* Icon — fades in smoothly */}
+                <motion.div
+                  animate={{ opacity: showModal ? 1 : perk.major ? 0.65 : 0.45, scale: showModal ? 1 : 0.9 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="flex items-center justify-center"
+                >
+                  <Icon
+                    icon={perk.icon}
+                    width={perk.major ? 28 : 20}
+                    height={perk.major ? 28 : 20}
+                    className="text-[#0c0d0f]"
+                  />
+                </motion.div>
+              </div>
 
-            {/* Perk modal — shown on hover, pin, or zoom.
+              {/* Perk modal — shown on hover, pin, or zoom.
                 Flips below the star when y < 32 % to avoid top-edge cropping. */}
-            <AnimatePresence>
-              {showModal && (() => {
-                const above = perk.y >= 32;
-                const initY = above ? 8 : -8;
-                const exitY = above ? 5 : -5;
-                return (
-                  <motion.div
-                    key="modal"
-                    initial={{ opacity: 0, y: initY, scale: 0.92 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: exitY, scale: 0.92 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    className="hidden md:flex absolute left-1/2 -translate-x-1/2 pointer-events-none z-30 flex-col transition-all duration-300"
-                    style={{
-                      width: isZoomed ? 320 : 240,
-                      ...(above
-                        ? { bottom: "100%", marginBottom: 8 }
-                        : { top: "100%", marginTop: 8 }),
-                    }}
-                  >
-                    {/* Stem rendered BEFORE the box when modal is below the star,
+              <AnimatePresence>
+                {showModal && (() => {
+                  const above = perk.y >= 32;
+                  const initY = above ? 8 : -8;
+                  const exitY = above ? 5 : -5;
+                  return (
+                    <motion.div
+                      key="modal"
+                      initial={{ opacity: 0, y: initY, scale: 0.92 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: exitY, scale: 0.92 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="hidden md:flex absolute left-1/2 -translate-x-1/2 pointer-events-none z-30 flex-col transition-all duration-300"
+                      style={{
+                        width: isZoomed ? 320 : 240,
+                        ...(above
+                          ? { bottom: "100%", marginBottom: 8 }
+                          : { top: "100%", marginTop: 8 }),
+                      }}
+                    >
+                      {/* Stem rendered BEFORE the box when modal is below the star,
                       so the line visually connects upward toward the star core. */}
-                    {!above && <div className="w-px h-4 bg-[#2a2a2e] mx-auto" />}
+                      {!above && <div className="w-px h-4 bg-[#2a2a2e] mx-auto" />}
 
-                    <div className="border border-[#2e2e32] bg-[#0c0d0f]/97 p-5">
-                      {/* Icon */}
-                      <div className="flex items-center justify-center mb-4">
-                        <div className={`${isZoomed ? "w-18 h-18" : "w-14 h-14"} border border-[#2e2e32] flex items-center justify-center bg-[#111214] transition-all duration-300`}>
-                          <Icon icon={perk.icon} width={isZoomed ? 38 : 28} height={isZoomed ? 38 : 28} className="text-[#9a9aa8]" />
+                      <div className="border border-[#2e2e32] bg-[#0c0d0f]/97 p-5">
+                        {/* Icon */}
+                        <div className="flex items-center justify-center mb-4">
+                          <div className={`${isZoomed ? "w-18 h-18" : "w-14 h-14"} border border-[#2e2e32] flex items-center justify-center bg-[#111214] transition-all duration-300`}>
+                            <Icon icon={perk.icon} width={isZoomed ? 38 : 28} height={isZoomed ? 38 : 28} className="text-[#9a9aa8]" />
+                          </div>
                         </div>
-                      </div>
-                      {/* Divider */}
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="h-px flex-1 bg-[#2a2a2e]" />
-                        <div className="w-1.5 h-1.5 rotate-45 bg-[#3a3a40]" />
-                        <div className="h-px flex-1 bg-[#2a2a2e]" />
-                      </div>
-                      <div className={`font-['Cinzel',serif] ${isZoomed ? "text-base" : "text-sm"} tracking-widest uppercase text-[#e8e6e3] text-center leading-snug transition-all duration-300`}>
-                        {perk.name}
-                      </div>
-                      <div className={`font-['Inter',sans-serif] ${isZoomed ? "text-xs md:text-sm" : "text-xs"} tracking-wide text-[#5c5c66] mt-2 text-center transition-all duration-300`}>
-                        {perk.desc}
-                      </div>
-                      {(isPinned || isZoomed) && (
-                        <div className="mt-4 flex items-center justify-center gap-2">
-                          <div className="h-px w-6 bg-[#2a2a2e]" />
-                          <span className="font-['Inter',sans-serif] text-[9px] tracking-[0.25em] uppercase text-[#3e3e48]">Attuned</span>
-                          <div className="h-px w-6 bg-[#2a2a2e]" />
+                        {/* Divider */}
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="h-px flex-1 bg-[#2a2a2e]" />
+                          <div className="w-1.5 h-1.5 rotate-45 bg-[#3a3a40]" />
+                          <div className="h-px flex-1 bg-[#2a2a2e]" />
                         </div>
-                      )}
-                    </div>
+                        <div className={`font-['Cinzel',serif] ${isZoomed ? "text-base" : "text-sm"} tracking-widest uppercase text-[#e8e6e3] text-center leading-snug transition-all duration-300`}>
+                          {perk.name}
+                        </div>
+                        <div className={`font-['Inter',sans-serif] ${isZoomed ? "text-xs md:text-sm" : "text-xs"} tracking-wide text-[#5c5c66] mt-2 text-center transition-all duration-300`}>
+                          {perk.desc}
+                        </div>
+                        {(isPinned || isZoomed) && (
+                          <div className="mt-4 flex items-center justify-center gap-2">
+                            <div className="h-px w-6 bg-[#2a2a2e]" />
+                            <span className="font-['Inter',sans-serif] text-[9px] tracking-[0.25em] uppercase text-[#3e3e48]">Attuned</span>
+                            <div className="h-px w-6 bg-[#2a2a2e]" />
+                          </div>
+                        )}
+                      </div>
 
-                    {/* Stem rendered AFTER the box when modal is above the star. */}
-                    {above && <div className="w-px h-4 bg-[#2a2a2e] mx-auto" />}
-                  </motion.div>
-                );
-              })()}
-            </AnimatePresence>
+                      {/* Stem rendered AFTER the box when modal is above the star. */}
+                      {above && <div className="w-px h-4 bg-[#2a2a2e] mx-auto" />}
+                    </motion.div>
+                  );
+                })()}
+              </AnimatePresence>
             </div>
           </div>
         );
@@ -559,7 +435,8 @@ export function SkillTrees() {
       className="relative h-dvh border-b border-[#222] lg:snap-start overflow-hidden flex flex-col"
       style={{ background: "radial-gradient(circle at 50% 50%, #080614 0%, #030308 70%, #010103 100%)" }}
     >
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes starFloat-0 { 0%, 100% { transform: translate(0px, 0px); } 50% { transform: translate(4px, -4px); } }
         @keyframes starFloat-1 { 0%, 100% { transform: translate(0px, 0px); } 50% { transform: translate(-4px, 3px); } }
         @keyframes starFloat-2 { 0%, 100% { transform: translate(0px, 0px); } 50% { transform: translate(3px, 5px); } }

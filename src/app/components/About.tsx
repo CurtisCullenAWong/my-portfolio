@@ -1,47 +1,7 @@
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useRef, useState, useEffect } from "react";
 
-const ATTRIBUTES = [
-  { label: "Frontend Mastery", value: 92, glyph: "I" },
-  { label: "Backend Design",   value: 78, glyph: "II" },
-  { label: "Mobile Craft",     value: 72, glyph: "III" },
-  { label: "UI / UX Sensibility", value: 86, glyph: "IV" },
-  { label: "Agentic AI",       value: 68, glyph: "V" },
-];
-
-const VITALS = [
-  { label: "Years Active",    value: "5+" },
-  { label: "Projects Shipped", value: "9+" },
-  { label: "Technologies",    value: "20+" },
-  { label: "Origin",          value: "Parañaque" },
-];
-
-const TIMELINE = [
-  {
-    year: "2026",
-    title: "Full-Stack Developer Intern",
-    org: "Boss Cargo Express Freight Services Inc.",
-    note: "Las Piñas, Philippines",
-  },
-  {
-    year: "2022 — 2026",
-    title: "BS Information Technology",
-    org: "National University – Mall of Asia",
-    note: "Mobile & Web Applications · Magna Cum Laude · Dean's Lister",
-  },
-  {
-    year: "2016 — 2022",
-    title: "Secondary Education",
-    org: "Camarines Norte Chung Hua High School",
-    note: "Daet, Camarines Norte",
-  },
-  {
-    year: "2010 — 2016",
-    title: "Primary Education",
-    org: "Pasay Chung Hua Academy",
-    note: "Pasay City, Philippines",
-  },
-];
+import { ATTRIBUTES, VITALS, TIMELINE } from "../../data/portfolioData";
 
 function AnimatedCounter({ value, inView }: { value: number; inView: boolean }) {
   const [displayValue, setDisplayValue] = useState(0);
@@ -327,7 +287,7 @@ export function About() {
       ref={sectionRef}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className="relative min-h-dvh lg:h-dvh flex flex-col justify-center lg:overflow-hidden border-b border-[#1a1a1e] lg:snap-start py-16 lg:py-0"
+      className="relative min-h-dvh flex flex-col justify-center border-b border-[#1a1a1e] lg:snap-start py-16 lg:py-12"
     >
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes sweep {
@@ -463,29 +423,29 @@ export function About() {
             </div>
           </div>
 
-          {/* Education & Experience — Horizontal Timeline */}
+          {/* Education & Experience — Responsive Timeline */}
           <div className="space-y-4 pt-2">
             <div className="flex items-center gap-4">
               <p className="font-['Cinzel',serif] tracking-[0.4em] uppercase text-[11px] text-[#4e4e5b]">Experience & Education</p>
               <div className="flex-1 h-px bg-[#161618]" />
             </div>
-            {/* Horizontal scroll container with padding to prevent rotated diamond clipping */}
-            <div className="relative pt-2 px-2 pb-3 overflow-hidden">
-              {/* Connecting line centered vertically relative to nodes */}
-              <div className="absolute top-[16px] left-4 right-4 h-px bg-[#1a1a20] z-0" />
-              <div className="flex gap-6 overflow-x-auto scrollbar-hide relative z-10 pb-1">
+            {/* Scroll container with no overflow clipping in vertical stack mode */}
+            <div className="relative pt-4 px-3 pb-3 overflow-visible">
+              {/* Connecting line centered vertically relative to nodes — desktop only */}
+              <div className="absolute top-[24px] left-4 right-4 h-px bg-[#1a1a20] z-0 hidden md:block" />
+              <div className="flex flex-col md:flex-row gap-6 md:overflow-x-auto scrollbar-hide relative z-10 pb-1">
                 {TIMELINE.map((entry, idx) => (
-                  <div key={idx} className="flex-1 min-w-[210px] md:min-w-[240px] group pr-2">
-                    {/* Node positioned above the connector line */}
-                    <div className="relative h-4 flex items-center mb-3">
+                  <div key={idx} className="flex-1 md:min-w-[210px] lg:min-w-[240px] group md:pr-2 border-l border-[#1a1a20] md:border-l-0 pl-4 md:pl-0">
+                    {/* Node positioned above the connector line — desktop only */}
+                    <div className="relative h-4 flex items-center mb-3 hidden md:flex pl-1">
                       <div className="w-[10px] h-[10px] rotate-45 border border-[#3a3a46] bg-[#0a0a0c] group-hover:border-[#8a8a96] group-hover:bg-[#121217] transition-all duration-200 z-10 shadow-[0_0_8px_rgba(0,0,0,0.8)]" />
                     </div>
                     {/* Content with high readability text colors */}
                     <div className="pl-1">
-                      <p className="font-['Inter',sans-serif] text-[9px] tracking-[0.2em] text-[#5a5a64] uppercase mb-1">{entry.year}</p>
-                      <h4 className="font-['Cinzel',serif] text-[11px] tracking-wide text-[#dcdbd9] group-hover:text-white transition-colors duration-200 leading-snug font-medium">{entry.title}</h4>
-                      <p className="font-['Inter',sans-serif] text-[11px] text-[#9ca3af] mt-0.5 leading-snug">{entry.org}</p>
-                      <p className="font-['Inter',sans-serif] text-[9.5px] tracking-wide text-[#71717a] mt-1.5 italic leading-relaxed">{entry.note}</p>
+                      <p className="font-['Inter',sans-serif] text-[9px] tracking-[0.2em] text-[#8a8a93] uppercase mb-1">{entry.year}</p>
+                      <h4 className="font-['Cinzel',serif] text-[11px] tracking-wide text-[#e8e6e3] group-hover:text-white transition-colors duration-200 leading-snug font-medium">{entry.title}</h4>
+                      <p className="font-['Inter',sans-serif] text-[11px] text-[#a1a1aa] mt-0.5 leading-snug">{entry.org}</p>
+                      <p className="font-['Inter',sans-serif] text-[9.5px] tracking-wide text-[#8a8a93] mt-1.5 italic leading-relaxed">{entry.note}</p>
                     </div>
                   </div>
                 ))}

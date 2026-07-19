@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Github, Linkedin, Mail, FileText, Phone, Copy, Check } from "lucide-react";
+import { Copy, Check } from "lucide-react";
+import { DEEDS, TOMES } from "../../data/portfolioData";
 
 type Tab = "lore" | "quest" | "deeds" | "codex";
 
@@ -31,60 +32,6 @@ export function Footer() {
     { id: "deeds", text: `"Where can I find your professional profiles?"`, prefix: "[Links]" },
     { id: "codex", text: `"Access your resume and documents."`, prefix: "[Resources]" },
   ] as const;
-
-  const DEEDS = [
-    {
-      name: "GitHub Profile",
-      role: "Repositories",
-      desc: "Examine code repositories containing open-source contributions, tools, and components.",
-      url: "https://github.com/CurtisCullenAWong",
-      icon: <Github size={18} className="text-[#9a9aa8]" />,
-      copyValue: null,
-    },
-    {
-      name: "LinkedIn Profile",
-      role: "Network",
-      desc: "Connect with the developer to collaborate on projects or discuss employment opportunities.",
-      url: "https://www.linkedin.com/in/curtis-cullen-wong-3a9434367",
-      icon: <Linkedin size={18} className="text-[#9a9aa8]" />,
-      copyValue: null,
-    },
-    {
-      name: "curtiscullenagustinwong@gmail.com",
-      role: "Email Direct",
-      desc: "Send a direct email inquiry regarding business partnerships or hiring questions.",
-      url: "mailto:curtiscullenagustinwong@gmail.com",
-      icon: <Mail size={18} className="text-[#9a9aa8]" />,
-      copyValue: "curtiscullenagustinwong@gmail.com",
-    },
-    {
-      name: "+63 999-488-5479",
-      role: "Phone / Mobile",
-      desc: "Reach out via mobile for time-sensitive inquiries or direct conversation.",
-      url: "tel:+639994885479",
-      icon: <Phone size={18} className="text-[#9a9aa8]" />,
-      copyValue: "+639994885479",
-    },
-  ];
-
-  const TOMES = [
-    {
-      name: "Professional Resume",
-      type: "Curriculum Vitae",
-      desc: "A comprehensive document outlining work history, technical stack, and education details.",
-      url: "#", // Placeholder or actual resume link
-      icon: <FileText size={18} className="text-[#9a9aa8]" />,
-      action: "Open Resume (PDF)"
-    },
-    {
-      name: "Portfolio Source Code",
-      type: "Repository",
-      desc: "Inspect the layout files, styling configurations, and animations that constitute this portfolio website.",
-      url: "https://github.com/CurtisCullenAWong/my-portfolio",
-      icon: <Github size={18} className="text-[#9a9aa8]" />,
-      action: "View on GitHub"
-    }
-  ];
 
   return (
     <footer id="contact" className="relative min-h-dvh lg:h-dvh py-16 md:py-20 px-6 md:px-12 flex flex-col items-center justify-center lg:snap-start lg:overflow-hidden select-none">

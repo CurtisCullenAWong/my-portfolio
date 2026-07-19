@@ -2,71 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowUpRight, Diamond } from "lucide-react";
 
-const projects = [
-  {
-    title: "Vista AIMS",
-    subtitle: "Asset & Inventory Management System",
-    description: "Developed a cross-platform app for real-time inventory management of assets and consumables, built during the Boss Cargo Express internship.",
-    tags: ["React Native", "Expo", "Supabase"],
-    status: "Shipped",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1597407068889-782ba11fb621?w=1200&h=800&fit=crop&auto=format",
-  },
-  {
-    title: "Rate Matrix",
-    subtitle: "Logistics Pricing Platform",
-    description: "Developed an audit-ready logistics platform for managing complex shipping rates and client metrics, enabling structured rate management across carriers.",
-    tags: ["React.js", "Laravel"],
-    status: "Shipped",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1780764818910-80526d8aeb6d?w=1200&h=800&fit=crop&auto=format",
-  },
-  {
-    title: "BCE Corporate Website",
-    subtitle: "Full-Stack Web App & ATS",
-    description: "Engineered a real-time corporate web app and ATS featuring interactive map components, traffic analytics, and a trained AI chatbot with LLM/cloud fallback and custom TTS voice integration.",
-    tags: ["Next.js", "Supabase", "Ollama", "Kokoro TTS"],
-    status: "Shipped",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1475139441338-693e7dbe20b6?w=1200&h=800&fit=crop&auto=format",
-  },
-  {
-    title: "EasyTrack",
-    subtitle: "Real-Time Delivery & Booking App",
-    description: "Led development of a mobile and web application for real-time messaging, delivery tracking, luggage booking, and AI analytics — built for EGC-GHE and AirAsia as a thesis project.",
-    tags: ["React Native", "Flutter", "Supabase", "Google Cloud"],
-    status: "Shipped",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?w=1200&h=800&fit=crop&auto=format",
-  },
-  {
-    title: "Still Cafè POS",
-    subtitle: "Point-of-Sale & Inventory App",
-    description: "Built a reliable and practical point-of-sale and inventory management application designed specifically for boutique coffee shops and small cafes.",
-    tags: ["React Native", "Expo", "SQLite"],
-    status: "Shipped",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&h=800&fit=crop&auto=format",
-  },
-  {
-    title: "Detailed Spotify Playlists",
-    subtitle: "Power-User Music Library Manager",
-    description: "A personal, power-user workspace to organize, sort, group, and clean up your Spotify music library. Analyzes song metadata and audio features to help users restructure their library.",
-    tags: ["React", "Spotify Web API"],
-    status: "In Progress",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1655058402270-de7dd5838ed5?w=1200&h=800&fit=crop&auto=format",
-  },
-  {
-    title: "GeoDetect",
-    subtitle: "AI Geographical Analysis App",
-    description: "Developed a cross-platform mobile application providing in-depth, structured AI analysis of a user's current geographical coordinates.",
-    tags: ["Flutter", "Google Maps API"],
-    status: "Shipped",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=1200&h=800&fit=crop&auto=format",
-  },
-];
+import { projects } from "../../data/portfolioData";
 
 export function ProjectLogs() {
   const [hovered, setHovered] = useState<number | null>(null);
