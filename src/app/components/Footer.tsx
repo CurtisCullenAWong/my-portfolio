@@ -41,7 +41,7 @@ Services Offered:
   ] as const;
 
   return (
-    <footer id="contact" className="relative h-dvh py-6 md:py-8 px-4 md:px-12 flex flex-col items-center justify-between snap-start snap-always shrink-0 select-none overflow-hidden">
+    <footer id="contact" className="relative min-h-dvh lg:h-dvh py-6 md:py-8 px-4 md:px-12 flex flex-col items-center justify-between lg:snap-start lg:snap-always shrink-0 select-none overflow-hidden">
       {/* Night sky background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <img
