@@ -62,7 +62,6 @@ export const projects = [
     status: "Shipped",
     url: "https://curtiscullenawong.github.io/asset-consumable-inventory/",
     liveUrl: "https://curtiscullenawong.github.io/asset-consumable-inventory/",
-    preview: "https://images.unsplash.com/photo-1597407068889-782ba11fb621?w=1200&h=800&fit=crop&auto=format",
   },
   {
     title: "Rate Matrix",
@@ -70,8 +69,8 @@ export const projects = [
     description: "Developed an audit-ready logistics platform for managing complex shipping rates and client metrics, enabling structured rate management across carriers.",
     tags: ["React.js", "Laravel"],
     status: "Shipped",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1780764818910-80526d8aeb6d?w=1200&h=800&fit=crop&auto=format",
+    url: "https://curtiscullenawong.github.io/ratrix-remake/",
+    liveUrl: "https://curtiscullenawong.github.io/ratrix-remake/",
   },
   {
     title: "BCE Corporate Website",
@@ -79,8 +78,8 @@ export const projects = [
     description: "Engineered a real-time corporate web app and ATS featuring interactive map components, traffic analytics, and a trained AI chatbot with LLM/cloud fallback and custom TTS voice integration.",
     tags: ["Next.js", "Supabase", "Ollama", "Kokoro TTS"],
     status: "Shipped",
-    url: "#",
-    preview: "https://images.unsplash.com/photo-1475139441338-693e7dbe20b6?w=1200&h=800&fit=crop&auto=format",
+    url: "https://bosscargo.vercel.app/",
+    liveUrl: "https://bosscargo.vercel.app/",
   },
   {
     title: "EasyTrack",

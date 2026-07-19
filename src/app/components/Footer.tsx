@@ -154,8 +154,8 @@ export function Footer() {
                       {[
                         { label: "Profession", value: "Full-Stack Dev" },
                         { label: "Base", value: "Parañaque, PH" },
-                        { label: "Core Stack", value: "React & Laravel" },
-                        { label: "Focus Area", value: "AI & Automation" },
+                        { label: "Focus Area", value: "AI, Web & Mobile Dev" },
+                        { label: "Soft skills", value: "Adaptable, Hardworking, Positive Mindset, Coachability" }
                       ].map((stat) => (
                         <div key={stat.label} className="flex flex-col gap-1">
                           <span className="font-['Inter',sans-serif] text-[8px] tracking-widest text-[#5a5a62] uppercase">{stat.label}</span>

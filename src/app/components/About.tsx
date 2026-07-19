@@ -79,23 +79,23 @@ function StatBar({
 
 function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
   const nodes = [
-    { name: "AQUA",   rune: "ᛟ", color: "#38bdf8", label: "Frontend", x: 100, y: 40 }, 
-    { name: "IGNIS",  rune: "ᚠ", color: "#f97316", label: "Backend", x: 157.06, y: 81.46 },  
-    { name: "TERRA",  rune: "ᛗ", color: "#10b981", label: "Mobile", x: 135.28, y: 148.54 },   
-    { name: "AER",    rune: "ᚷ", color: "#a855f7", label: "UI / UX", x: 64.72, y: 148.54 },  
-    { name: "AETHER", rune: "ᛃ", color: "#eab308", label: "Agentic AI", x: 42.94, y: 81.46 }, 
+    { name: "AQUA",   rune: "ᛟ", color: "#38bdf8", label: "Frontend",   x: 100,    y: 40,     lx: 100, ly: 20,  anchor: "middle" }, 
+    { name: "IGNIS",  rune: "ᚠ", color: "#f97316", label: "Backend",    x: 157.06, y: 81.46,  lx: 174, ly: 78,  anchor: "start" },  
+    { name: "TERRA",  rune: "ᛗ", color: "#10b981", label: "Mobile",     x: 135.28, y: 148.54, lx: 152, ly: 164, anchor: "start" },   
+    { name: "AER",    rune: "ᚷ", color: "#a855f7", label: "UI / UX",    x: 64.72,  y: 148.54, lx: 48,  ly: 164, anchor: "end" },  
+    { name: "AETHER", rune: "ᛃ", color: "#eab308", label: "Agentic AI", x: 42.94,  y: 81.46,  lx: 26,  ly: 78,  anchor: "end" }, 
   ];
 
   const activeColor = hoveredAttr !== null ? nodes[hoveredAttr].color : "#3a3a46";
 
   return (
-    <svg viewBox="0 0 200 200" className="w-[50vmin] h-[50vmin] max-w-[400px] max-h-[400px]" aria-hidden>
+    <svg viewBox="-80 -40 360 280" className="w-[75vmin] sm:w-[65vmin] lg:w-[50vmin] max-w-[420px] lg:max-w-[480px] aspect-[360/280] overflow-visible" aria-hidden>
       <defs>
         <radialGradient id="center-glow-about" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor={activeColor} stopOpacity="0.45" />
           <stop offset="100%" stopColor="#0a0a0c" stopOpacity="0" />
         </radialGradient>
-        <filter id="glow-filter-about" filterUnits="userSpaceOnUse" x="0" y="0" width="200" height="200">
+        <filter id="glow-filter-about" filterUnits="userSpaceOnUse" x="-80" y="-40" width="360" height="280">
           <feGaussianBlur stdDeviation="1.8" result="coloredBlur"/>
           <feMerge>
             <feMergeNode in="coloredBlur"/>
@@ -113,11 +113,11 @@ function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
         transition={{ duration: 70, repeat: Infinity, ease: "linear" }}
         style={{ originX: "100px", originY: "100px" }}
       >
-        <circle cx="100" cy="100" r="83" fill="none" stroke="#1c1c22" strokeWidth="0.5" />
-        <circle cx="100" cy="100" r="77" fill="none" stroke="#1c1c22" strokeWidth="0.5" />
+        <circle cx="100" cy="100" r="83" fill="none" stroke="#252530" strokeWidth="0.5" />
+        <circle cx="100" cy="100" r="77" fill="none" stroke="#252530" strokeWidth="0.5" />
         
         <path id="circlePathAbout" d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0" fill="none" />
-        <text fill="#2a2a32" fontSize="5.2" letterSpacing="3.5px" className="font-['Cinzel',serif] select-none">
+        <text fill="#4b5563" fontSize="5.2" letterSpacing="3.5px" className="font-['Cinzel',serif] select-none transition-colors duration-300">
           <textPath href="#circlePathAbout" startOffset="0%">
             ᚠ ARTIFICER ᚦ SCHOLAR ᚲ ARCHITECT ᛉ SENTINEL ᛟ AETHER ᚠ ARTIFICER ᚦ SCHOLAR ᚲ ARCHITECT ᛉ SENTINEL ᛟ AETHER
           </textPath>
@@ -130,7 +130,7 @@ function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
         transition={{ duration: 55, repeat: Infinity, ease: "linear" }}
         style={{ originX: "100px", originY: "100px" }}
       >
-        <circle cx="100" cy="100" r="70" fill="none" stroke="#252530" strokeWidth="0.8" />
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#2a2a35" strokeWidth="0.8" />
         {/* Tick marks every 15 degrees */}
         {Array.from({ length: 24 }).map((_, i) => {
           const a = (i * 15 * Math.PI) / 180;
@@ -143,7 +143,7 @@ function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
               y1={100 + Math.sin(a) * r1}
               x2={100 + Math.cos(a) * r2}
               y2={100 + Math.sin(a) * r2}
-              stroke="#222"
+              stroke="#2e2e38"
               strokeWidth="0.5"
             />
           );
@@ -156,22 +156,22 @@ function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
         transition={{ duration: 150, repeat: Infinity, ease: "linear" }}
         style={{ originX: "100px", originY: "100px" }}
       >
-        <polygon points="100,25 165,137.5 35,137.5" fill="none" stroke="#16161b" strokeWidth="0.6" />
-        <polygon points="100,175 35,62.5 165,62.5" fill="none" stroke="#16161b" strokeWidth="0.6" />
-        <circle cx="100" cy="100" r="60" fill="none" stroke="#16161b" strokeWidth="0.5" strokeDasharray="3, 3" />
+        <polygon points="100,25 165,137.5 35,137.5" fill="none" stroke="#22222a" strokeWidth="0.6" />
+        <polygon points="100,175 35,62.5 165,62.5" fill="none" stroke="#22222a" strokeWidth="0.6" />
+        <circle cx="100" cy="100" r="60" fill="none" stroke="#22222a" strokeWidth="0.5" strokeDasharray="3, 3" />
       </motion.g>
 
       {/* Inner geometric layers */}
-      <circle cx="100" cy="100" r="45" fill="none" stroke="#202028" strokeWidth="0.5" />
-      <circle cx="100" cy="100" r="42" fill="none" stroke="#202028" strokeWidth="0.4" />
-      <circle cx="100" cy="100" r="18" fill="none" stroke="#202028" strokeWidth="0.8" />
+      <circle cx="100" cy="100" r="45" fill="none" stroke="#252532" strokeWidth="0.5" />
+      <circle cx="100" cy="100" r="42" fill="none" stroke="#252532" strokeWidth="0.4" />
+      <circle cx="100" cy="100" r="18" fill="none" stroke="#252532" strokeWidth="0.8" />
       
       {/* Pentagram lines connecting the 5 nodes */}
       <polygon 
         points="100,40 135.28,148.54 42.94,81.46 157.06,81.46 64.72,148.54" 
         fill="none" 
-        stroke="#141418" 
-        strokeWidth="0.5" 
+        stroke="#22222c" 
+        strokeWidth="0.6" 
       />
 
       {/* Spokes and glowing highlights */}
@@ -185,8 +185,8 @@ function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
               y1="100"
               x2={node.x}
               y2={node.y}
-              stroke={isHovered ? node.color : "#16161c"}
-              strokeWidth={isHovered ? 1.5 : 0.5}
+              stroke={isHovered ? node.color : "#252532"}
+              strokeWidth={isHovered ? 1.5 : 0.6}
               className="transition-all duration-300"
               filter={isHovered ? "url(#glow-filter-about)" : undefined}
             />
@@ -195,10 +195,10 @@ function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
             <circle
               cx={node.x}
               cy={node.y}
-              r={isHovered ? 7 : 4.5}
+              r={isHovered ? 7 : 4.8}
               fill="#0a0a0c"
-              stroke={isHovered ? node.color : "#2a2a34"}
-              strokeWidth={isHovered ? 1.5 : 0.8}
+              stroke={isHovered ? node.color : "#3f3f4e"}
+              strokeWidth={isHovered ? 1.5 : 0.9}
               className="transition-all duration-300"
               filter={isHovered ? "url(#glow-filter-about)" : undefined}
             />
@@ -208,28 +208,36 @@ function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
               x={node.x}
               y={node.y + 1.5}
               textAnchor="middle"
-              fill={isHovered ? node.color : "#3a3a46"}
+              fill={isHovered ? node.color : "#64748b"}
               fontSize="4.5"
               className="font-mono transition-colors duration-300 select-none"
             >
               {node.rune}
             </text>
+          </g>
+        );
+      })}
 
-            {/* Label along the circumference */}
-            {isHovered && (
-              <text
-                x={node.x > 100 ? node.x + 12 : node.x - 12}
-                y={node.y + 2.5}
-                textAnchor={node.x > 100 ? "start" : "end"}
-                fill={node.color}
-                fontSize="5"
-                fontWeight="bold"
-                className="font-['Cinzel',serif] tracking-wider select-none"
-                filter="url(#glow-filter-about)"
-              >
-                {node.label.toUpperCase()}
-              </text>
-            )}
+      {/* Node Labels - ALWAYS visible with soft ambient glow, brightened when active */}
+      {nodes.map((node, i) => {
+        const isHovered = hoveredAttr === i;
+        const opacity = isHovered ? 1 : 0.75;
+        const fillColor = isHovered ? node.color : "#94a3b8";
+        return (
+          <g key={`label-${node.name}`}>
+            <text
+              x={node.lx}
+              y={node.ly}
+              textAnchor={node.anchor as any}
+              fill={fillColor}
+              fontSize="5.5"
+              fontWeight={isHovered ? "bold" : "600"}
+              className="font-['Cinzel',serif] tracking-[0.2em] select-none transition-all duration-300"
+              filter={isHovered ? "url(#glow-filter-about)" : undefined}
+              opacity={opacity}
+            >
+              {node.label.toUpperCase()}
+            </text>
           </g>
         );
       })}
@@ -240,7 +248,7 @@ function AlchemicalCircle({ hoveredAttr }: { hoveredAttr: number | null }) {
         cy="100" 
         r="7.5" 
         fill={hoveredAttr !== null ? nodes[hoveredAttr].color : "#1a1a24"} 
-        stroke="#2e2e38" 
+        stroke="#3a3a48" 
         strokeWidth="0.8" 
         className="transition-colors duration-500"
       />
@@ -287,7 +295,7 @@ export function About() {
       ref={sectionRef}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className="relative min-h-dvh flex flex-col justify-center border-b border-[#1a1a1e] lg:snap-start py-16 lg:py-12"
+      className="relative min-h-dvh lg:h-dvh flex flex-col justify-center border-b border-[#1a1a1e] lg:snap-start py-10 md:py-12 lg:py-4 overflow-hidden"
     >
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes sweep {
@@ -309,9 +317,9 @@ export function About() {
 
       {/* Dynamic interactive alchemical circle watermark */}
       <motion.div 
-        className="absolute inset-0 z-0 flex items-center justify-end pr-4 lg:pr-24 pointer-events-none transition-opacity duration-300"
+        className="absolute inset-0 z-0 flex items-center justify-center lg:justify-end px-4 lg:pl-0 lg:pr-8 xl:pr-16 pointer-events-none transition-opacity duration-300 overflow-visible"
         style={{
-          opacity: hoveredAttr !== null ? 0.20 : 0.08,
+          opacity: hoveredAttr !== null ? 0.45 : 0.22,
           rotateX: circleRotateX,
           rotateY: circleRotateY,
           transformPerspective: 1200
@@ -320,18 +328,18 @@ export function About() {
         <AlchemicalCircle hoveredAttr={hoveredAttr} />
       </motion.div>
 
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-10 lg:gap-20 items-center py-12">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-12 lg:px-16 grid grid-cols-1 lg:grid-cols-[220px_1fr] xl:grid-cols-[260px_1fr] gap-6 md:gap-10 lg:gap-12 items-center py-4 lg:py-2">
 
         {/* Left — Portrait */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 1, ease: "easeOut" }}
-          className="w-full flex flex-col items-center lg:items-start gap-6"
+          className="w-full flex flex-col items-center lg:items-start gap-4 lg:gap-4"
         >
           {/* Portrait frame with 3D tilt and expandable corners on hover */}
           <motion.div 
-            className="relative w-full max-w-[280px]"
+            className="relative w-full max-w-[200px] sm:max-w-[230px] lg:max-w-[220px] xl:max-w-[260px]"
             onMouseEnter={() => setPortraitHovered(true)}
             onMouseLeave={() => setPortraitHovered(false)}
             style={{ 
@@ -349,7 +357,7 @@ export function About() {
             ].map((corner, i) => (
               <motion.div 
                 key={i} 
-                className={`absolute ${corner.pos} w-5 h-5 border-[#3a3a46] ${corner.cls} z-10`}
+                className={`absolute ${corner.pos} w-4 h-4 border-[#3a3a46] ${corner.cls} z-10`}
                 animate={{ x: portraitHovered ? corner.x : 0, y: portraitHovered ? corner.y : 0 }}
                 transition={{ duration: 0.25, ease: "easeOut" }}
               />
@@ -366,7 +374,7 @@ export function About() {
             </div>
 
             {/* Portrait overlay label */}
-            <div className="absolute bottom-4 left-4 right-4">
+            <div className="absolute bottom-3 left-3 right-3">
               <p className="font-['Cinzel',serif] text-[8px] tracking-[0.4em] text-[#6a6a72] uppercase">
                 Character Portrait
               </p>
@@ -374,11 +382,11 @@ export function About() {
           </motion.div>
 
           {/* Vitals grid */}
-          <div className="grid grid-cols-2 gap-3 w-full max-w-[280px]">
+          <div className="grid grid-cols-2 gap-2 sm:gap-2.5 w-full max-w-[200px] sm:max-w-[230px] lg:max-w-[220px] xl:max-w-[260px]">
             {VITALS.map(({ label, value }) => (
-              <div key={label} className="border border-[#1a1a20] p-3 bg-[#0c0c0e]/60 hover:bg-[#121217] hover:border-[#2a2a35] transition-all duration-300">
-                <p className="font-['Cinzel',serif] text-[18px] text-[#e8e6e3] leading-none mb-1">{value}</p>
-                <p className="font-['Inter',sans-serif] text-[9px] tracking-[0.2em] text-[#6a6a72] uppercase">{label}</p>
+              <div key={label} className="border border-[#1a1a20] p-2 sm:p-2.5 bg-[#0c0c0e]/70 hover:bg-[#121217] hover:border-[#2a2a35] transition-all duration-300">
+                <p className="font-['Cinzel',serif] text-sm sm:text-base text-[#e8e6e3] leading-none mb-1">{value}</p>
+                <p className="font-['Inter',sans-serif] text-[8.5px] sm:text-[9px] tracking-[0.18em] text-[#71717a] uppercase truncate">{label}</p>
               </div>
             ))}
           </div>
@@ -389,28 +397,28 @@ export function About() {
           initial={{ opacity: 0, x: 20 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 1, ease: "easeOut", delay: 0.15 }}
-          className="w-full flex flex-col space-y-8"
+          className="w-full flex flex-col space-y-4 lg:space-y-4 xl:space-y-5"
         >
           {/* Header */}
-          <div className="space-y-2">
-            <p className="font-['Inter',sans-serif] text-[9px] tracking-[0.45em] uppercase text-[#4e4e5b]">Full-Stack Developer & Project Manager</p>
-            <h2 className="font-['Cinzel',serif] text-[clamp(1.6rem,3.5vw,3rem)] text-[#e8e6e3] tracking-wide leading-tight">The Artificer</h2>
+          <div className="space-y-1">
+            <p className="font-['Inter',sans-serif] text-[9px] sm:text-[10px] tracking-[0.45em] uppercase text-[#646473]">Full-Stack Developer & Project Manager</p>
+            <h2 className="font-['Cinzel',serif] text-[clamp(1.5rem,3vw,2.5rem)] text-[#e8e6e3] tracking-wide leading-tight">The Artificer</h2>
             <div className="h-px w-16 bg-[#252530]" />
           </div>
 
           {/* Lore bio */}
-          <div className="space-y-3 border-l border-[#1a1a20] pl-5">
-            <p className="font-['Inter',sans-serif] text-sm text-[#a1a1aa] leading-relaxed">A detail-oriented Full-Stack Developer and Project Manager experienced in leading cross-platform projects. He bridges gaps between complex technical requirements and user-friendly outcomes.</p>
-            <p className="font-['Inter',sans-serif] text-sm text-[#8a8a93] leading-relaxed">Committed to delivering quality code and efficient project workflows through orchestrated problem solving and technical mastery. His experience spans logistics, mobile, and AI-integrated applications across web and mobile platforms.</p>
+          <div className="space-y-2 border-l border-[#22222a] pl-3.5 sm:pl-4">
+            <p className="font-['Inter',sans-serif] text-xs sm:text-sm text-[#a1a1aa] leading-relaxed">A detail-oriented Full-Stack Developer and Project Manager experienced in leading cross-platform projects. He bridges gaps between complex technical requirements and user-friendly outcomes.</p>
+            <p className="font-['Inter',sans-serif] text-xs sm:text-sm text-[#8a8a93] leading-relaxed">Committed to delivering quality code and efficient project workflows through orchestrated problem solving and technical mastery. His experience spans logistics, mobile, and AI-integrated applications across web and mobile platforms.</p>
           </div>
 
           {/* Attributes */}
-          <div className="space-y-4">
+          <div className="space-y-2.5 sm:space-y-3">
             <div className="flex items-center gap-4">
-              <p className="font-['Cinzel',serif] tracking-[0.4em] uppercase text-[12px] text-[#4e4e5b]">Attributes</p>
-              <div className="flex-1 h-px bg-[#161618]" />
+              <p className="font-['Cinzel',serif] tracking-[0.4em] uppercase text-[10.5px] sm:text-[11px] text-[#71717a]">Attributes</p>
+              <div className="flex-1 h-px bg-[#1e1e24]" />
             </div>
-            <div className="space-y-4">
+            <div className="space-y-2 sm:space-y-2.5">
               {ATTRIBUTES.map((attr, i) => (
                 <StatBar 
                   key={attr.label} 
@@ -424,28 +432,29 @@ export function About() {
           </div>
 
           {/* Education & Experience — Responsive Timeline */}
-          <div className="space-y-4 pt-2">
+          <div className="space-y-2.5 sm:space-y-3 pt-1">
             <div className="flex items-center gap-4">
-              <p className="font-['Cinzel',serif] tracking-[0.4em] uppercase text-[11px] text-[#4e4e5b]">Experience & Education</p>
-              <div className="flex-1 h-px bg-[#161618]" />
+              <p className="font-['Cinzel',serif] tracking-[0.4em] uppercase text-[10px] sm:text-[10.5px] text-[#71717a]">Experience & Education</p>
+              <div className="flex-1 h-px bg-[#1e1e24]" />
             </div>
-            {/* Scroll container with no overflow clipping in vertical stack mode */}
-            <div className="relative pt-4 px-3 pb-3 overflow-visible">
-              {/* Connecting line centered vertically relative to nodes — desktop only */}
-              <div className="absolute top-[24px] left-4 right-4 h-px bg-[#1a1a20] z-0 hidden md:block" />
-              <div className="flex flex-col md:flex-row gap-6 overflow-x-hidden scrollbar-hide relative z-10 pb-1">
+            
+            <div className="relative pt-1 px-1 pb-1">
+              {/* Horizontal connector line — visible on sm and up */}
+              <div className="hidden sm:block absolute top-[14px] left-3 right-3 h-px bg-[#22222a] z-0" />
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-3 relative z-10">
                 {TIMELINE.map((entry, idx) => (
-                  <div key={idx} className="flex-1 md:min-w-[210px] lg:min-w-[240px] group md:pr-2 border-l border-[#1a1a20] md:border-l-0 pl-4 md:pl-0">
-                    {/* Node positioned above the connector line — desktop only */}
-                    <div className="relative h-4 flex items-center mb-3 hidden md:flex pl-1">
-                      <div className="w-[10px] h-[10px] rotate-45 border border-[#3a3a46] bg-[#0a0a0c] group-hover:border-[#8a8a96] group-hover:bg-[#121217] transition-all duration-200 z-10 shadow-[0_0_8px_rgba(0,0,0,0.8)]" />
+                  <div key={idx} className="group border-l border-[#22222a] sm:border-l-0 pl-3 sm:pl-0 sm:pt-0.5">
+                    {/* Diamond node on line — visible on sm and up */}
+                    <div className="hidden sm:flex items-center mb-2 pl-0.5">
+                      <div className="w-[8px] h-[8px] rotate-45 border border-[#4a4a58] bg-[#0a0a0c] group-hover:border-[#a1a1aa] group-hover:bg-[#16161c] transition-all duration-200 z-10 shadow-[0_0_8px_rgba(0,0,0,0.8)]" />
                     </div>
-                    {/* Content with high readability text colors */}
-                    <div className="pl-1">
-                      <p className="font-['Inter',sans-serif] text-[9px] tracking-[0.2em] text-[#8a8a93] uppercase mb-1">{entry.year}</p>
-                      <h4 className="font-['Cinzel',serif] text-[11px] tracking-wide text-[#e8e6e3] group-hover:text-white transition-colors duration-200 leading-snug font-medium">{entry.title}</h4>
-                      <p className="font-['Inter',sans-serif] text-[11px] text-[#a1a1aa] mt-0.5 leading-snug">{entry.org}</p>
-                      <p className="font-['Inter',sans-serif] text-[9.5px] tracking-wide text-[#8a8a93] mt-1.5 italic leading-relaxed">{entry.note}</p>
+                    {/* Entry details */}
+                    <div className="space-y-0.5">
+                      <p className="font-['Inter',sans-serif] text-[8.5px] tracking-[0.18em] text-[#8a8a93] uppercase">{entry.year}</p>
+                      <h4 className="font-['Cinzel',serif] text-[10.5px] sm:text-[11.5px] tracking-wide text-[#e8e6e3] group-hover:text-white transition-colors duration-200 leading-snug font-medium">{entry.title}</h4>
+                      <p className="font-['Inter',sans-serif] text-[10px] text-[#a1a1aa] leading-snug">{entry.org}</p>
+                      <p className="font-['Inter',sans-serif] text-[8.5px] sm:text-[9px] tracking-wide text-[#71717a] italic leading-relaxed">{entry.note}</p>
                     </div>
                   </div>
                 ))}
