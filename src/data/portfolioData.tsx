@@ -50,6 +50,9 @@ export const TIMELINE = [
 // PROJECTS COMPONENT DATA
 // ==========================================
 
+export const PROJECTS_CONFIDENTIALITY_NOTICE =
+  "All project live demos attached are static builds stripped of authentication and backend databases, and are deployed via GitHub Pages for confidentiality.";
+
 export const projects = [
   {
     title: "Vista AIMS",
@@ -57,7 +60,8 @@ export const projects = [
     description: "Developed a cross-platform app for real-time inventory management of assets and consumables, built during the Boss Cargo Express internship.",
     tags: ["React Native", "Expo", "Supabase"],
     status: "Shipped",
-    url: "#",
+    url: "https://curtiscullenawong.github.io/asset-consumable-inventory/",
+    liveUrl: "https://curtiscullenawong.github.io/asset-consumable-inventory/",
     preview: "https://images.unsplash.com/photo-1597407068889-782ba11fb621?w=1200&h=800&fit=crop&auto=format",
   },
   {

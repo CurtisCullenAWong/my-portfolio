@@ -1,30 +1,69 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowUpRight, Diamond } from "lucide-react";
+import { ArrowUpRight, Diamond, ShieldCheck, ExternalLink, Globe } from "lucide-react";
 
 import { projects } from "../../data/portfolioData";
 
 export function ProjectLogs() {
-  const [hovered, setHovered] = useState<number | null>(null);
-  const activeProject = hovered !== null ? projects[hovered] : null;
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const [loadedIframes, setLoadedIframes] = useState<Record<string, boolean>>({});
+
+  const activeProject = projects[selectedIndex] ?? projects[0];
+
+  // Preload live project URLs in background
+  const preloadedProjects = projects.filter(
+    (p) => p.url && p.url.startsWith("http")
+  );
+
+  const handleProjectClick = (url: string) => {
+    if (url && url !== "#") {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+  };
+
+  const handleIframeLoad = (title: string) => {
+    setLoadedIframes((prev) => ({ ...prev, [title]: true }));
+  };
 
   return (
     <section
       id="projects"
       className="relative min-h-dvh lg:h-dvh flex flex-col lg:overflow-hidden border-b border-[#1a1a1e] lg:snap-start"
     >
+      {/* Background iframe preloader */}
+      <div className="hidden pointer-events-none" aria-hidden="true">
+        {preloadedProjects.map((p) => (
+          <iframe
+            key={p.title}
+            src={p.url}
+            title={`Preload ${p.title}`}
+            tabIndex={-1}
+            onLoad={() => handleIframeLoad(p.title)}
+          />
+        ))}
+      </div>
+
       {/* Section header */}
-      <div className="shrink-0 flex items-center gap-5 px-6 md:px-12 pt-8 pb-5">
-        <div className="w-3.5 h-3.5 border border-[#3a3a44] rotate-45 flex items-center justify-center shrink-0">
-          <div className="w-1 h-1 bg-[#3a3a44] rotate-45" />
+      <div className="shrink-0 flex flex-col md:flex-row md:items-center justify-between gap-4 px-6 md:px-12 pt-7 pb-4 border-b border-[#141418]">
+        <div className="flex items-center gap-4">
+          <div className="w-3.5 h-3.5 border border-[#3a3a44] rotate-45 flex items-center justify-center shrink-0">
+            <div className="w-1 h-1 bg-[#3a3a44] rotate-45" />
+          </div>
+          <h2 className="font-['Cinzel',serif] text-xl md:text-2xl text-[#e8e6e3] tracking-[0.18em] uppercase">
+            Project Logs
+          </h2>
+          <span className="font-['Inter',sans-serif] text-xs text-[#5a5a65] tracking-widest uppercase">
+            ({projects.length})
+          </span>
         </div>
-        <h2 className="font-['Cinzel',serif] text-xl md:text-2xl text-[#e8e6e3] tracking-[0.2em] uppercase">
-          Project Logs
-        </h2>
-        <div className="flex-1 h-px bg-gradient-to-r from-[#222228] to-transparent" />
-        <span className="font-['Inter',sans-serif] text-[9px] tracking-[0.3em] text-[#5a5a62] uppercase">
-          {projects.length} entries
-        </span>
+
+        {/* Global Confidentiality Notice */}
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#0e0e12] border border-[#1e1e26] rounded-sm text-[#9a9aa5]">
+          <ShieldCheck size={14} className="text-[#8e8e9a] shrink-0" />
+          <span className="font-['Inter',sans-serif] text-xs text-[#9a9aa5] leading-none">
+            Live demos are stripped of auth & databases and hosted on GitHub Pages.
+          </span>
+        </div>
       </div>
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] lg:overflow-hidden">
@@ -32,171 +71,224 @@ export function ProjectLogs() {
         {/* Left — Project list */}
         <div className="overflow-y-visible lg:overflow-y-auto scrollbar-hide border-r border-[#161618] flex flex-col">
           {projects.map((project, idx) => {
-            const isHovered = hovered === idx;
+            const isSelected = selectedIndex === idx;
+            const hasLiveUrl = project.url && project.url.startsWith("http");
+
             return (
-              <motion.div
+              <div
                 key={idx}
-                onMouseEnter={() => setHovered(idx)}
-                onMouseLeave={() => setHovered(null)}
-                className="relative group cursor-pointer border-b border-[#111114] px-6 md:px-10 py-6 transition-colors duration-200"
-                style={{ background: isHovered ? "rgba(26,26,30,0.8)" : "transparent" }}
+                onMouseEnter={() => setSelectedIndex(idx)}
+                onClick={() => handleProjectClick(project.url)}
+                className={`relative group cursor-pointer border-b border-[#131316] px-6 md:px-8 py-5 transition-colors duration-200 ${
+                  isSelected ? "bg-[#141418]" : "hover:bg-[#0d0d10]"
+                }`}
               >
-                {/* Left accent bar */}
-                <motion.div
-                  className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#3a3a48]"
-                  initial={{ scaleY: 0 }}
-                  animate={{ scaleY: isHovered ? 1 : 0 }}
-                  transition={{ duration: 0.2 }}
-                  style={{ originY: 0 }}
+                {/* Subtle Left Accent Line */}
+                <div
+                  className={`absolute left-0 top-0 bottom-0 w-[2px] transition-all duration-200 ${
+                    isSelected ? "bg-[#c8c6c3] opacity-100" : "bg-[#3a3a48] opacity-0 group-hover:opacity-40"
+                  }`}
                 />
 
-                <div className="flex items-start gap-4">
-                  <div className="pt-[5px] shrink-0">
+                <div className="flex items-start gap-3.5">
+                  <div className="pt-1 shrink-0">
                     <Diamond
-                      size={10}
-                      className="fill-current transition-colors duration-200"
-                      style={{ color: isHovered ? "#6a6a72" : "#282830" }}
+                      size={9}
+                      className={`transition-colors duration-200 ${
+                        isSelected ? "text-[#c8c6c3] fill-[#c8c6c3]" : "text-[#3a3a44] fill-none"
+                      }`}
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-3 mb-1">
-                      <h3 className="font-['Cinzel',serif] text-base md:text-lg text-[#d8d6d3] tracking-wide leading-tight">
-                        {project.title}
-                      </h3>
-                      <div className="flex items-center gap-2 shrink-0 pt-0.5">
-                        <span
-                          className="font-['Inter',sans-serif] text-[8px] tracking-[0.2em] uppercase"
-                          style={{ color: project.status === "In Progress" ? "#a1a1aa" : "#5a5a62" }}
-                        >
+                    <div className="flex items-center justify-between gap-3 mb-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className={`font-['Cinzel',serif] text-base md:text-lg tracking-wide transition-colors ${
+                          isSelected ? "text-white font-medium" : "text-[#d0cecb] group-hover:text-white"
+                        }`}>
+                          {project.title}
+                        </h3>
+                        {hasLiveUrl && (
+                          <span className="font-['Inter',sans-serif] text-xs text-[#9a9aa5] tracking-wider uppercase">
+                            · Live
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className={`font-['Inter',sans-serif] text-xs tracking-wider uppercase ${
+                          project.status === "In Progress" ? "text-[#a1a1aa]" : "text-[#6a6a75]"
+                        }`}>
                           {project.status}
                         </span>
-                        <motion.div
-                          animate={{ opacity: isHovered ? 1 : 0, x: isHovered ? 0 : -4 }}
-                          transition={{ duration: 0.15 }}
-                        >
-                          <ArrowUpRight size={12} className="text-[#4a4a54]" />
-                        </motion.div>
+                        <ArrowUpRight
+                          size={14}
+                          className={`transition-transform duration-200 ${
+                            isSelected ? "text-[#c8c6c3] translate-x-0.5 -translate-y-0.5" : "text-[#3a3a46]"
+                          }`}
+                        />
                       </div>
                     </div>
-                    <p className="font-['Inter',sans-serif] text-[10px] md:text-xs text-[#6a6a72] tracking-wider mb-3">
+
+                    <p className="font-['Inter',sans-serif] text-xs text-[#7a7a85] tracking-wide mb-2">
                       {project.subtitle}
                     </p>
-                    <p
-                      className="font-['Inter',sans-serif] text-xs md:text-sm text-[#9ca3af] leading-relaxed overflow-hidden transition-all duration-300"
-                      style={{ maxHeight: isHovered ? "5rem" : "0", opacity: isHovered ? 1 : 0 }}
-                    >
+
+                    <p className={`font-['Inter',sans-serif] text-xs md:text-sm text-[#9ca3af] leading-relaxed transition-all duration-300 ${
+                      isSelected ? "max-h-24 opacity-100 mt-2" : "max-h-0 opacity-0 overflow-hidden"
+                    }`}>
                       {project.description}
                     </p>
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 mt-3">
+
+                    <div className="flex flex-wrap gap-x-2.5 gap-y-1 mt-2.5 items-center">
                       {project.tags.map((tag, tIdx) => (
-                        <span key={tIdx} className="font-['Inter',sans-serif] text-[9px] tracking-[0.18em] uppercase text-[#6a6a72] transition-colors duration-200"
-                          style={{ color: isHovered ? "#9ca3af" : undefined }}>
-                          {tIdx > 0 && <span className="mr-3 text-[#3a3a40]">·</span>}
+                        <span
+                          key={tIdx}
+                          className={`font-['Inter',sans-serif] text-xs tracking-wider uppercase transition-colors ${
+                            isSelected ? "text-[#9ca3af]" : "text-[#5a5a65]"
+                          }`}
+                        >
+                          {tIdx > 0 && <span className="mr-2.5 text-[#2a2a32]">·</span>}
                           {tag}
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>
 
-        {/* Right — Preview panel */}
+        {/* Right — Sustained Live Preview Panel */}
         <div className="hidden lg:flex items-center justify-center relative overflow-hidden bg-[#080809]">
           <AnimatePresence mode="wait">
-            {activeProject ? (
-              <motion.div
-                key={activeProject.title}
-                initial={{ opacity: 0, scale: 1.04 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.97 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-                className="absolute inset-0"
-              >
-                {/* Blurred background image */}
-                <img
-                  src={activeProject.preview}
-                  alt={`${activeProject.title} preview`}
-                  className="absolute inset-0 w-full h-full object-cover opacity-25 grayscale-[0.5]"
-                  style={{ filter: "blur(8px) grayscale(0.5)", transform: "scale(1.05)" }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#080809]/90 via-[#080809]/50 to-[#080809]/70" />
+            <motion.div
+              key={activeProject.title}
+              initial={{ opacity: 0, scale: 1.01 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.99 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="absolute inset-0 flex flex-col p-6"
+            >
+              {/* Subtle background glow */}
+              <img
+                src={activeProject.preview}
+                alt={`${activeProject.title} background`}
+                className="absolute inset-0 w-full h-full object-cover opacity-20 filter blur-xl grayscale"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#080809] via-[#080809]/80 to-[#080809]/60" />
 
-                {/* Browser mockup frame */}
-                <div className="absolute inset-8 flex flex-col">
-                  {/* Browser chrome */}
-                  <div className="flex items-center gap-2 px-4 py-2.5 bg-[#0e0e10]/90 border border-[#1e1e24] border-b-0">
-                    <div className="flex gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#1e1e22]" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#1e1e22]" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-[#1e1e22]" />
-                    </div>
-                    <div className="flex-1 h-5 bg-[#131316] border border-[#1a1a20] mx-3 flex items-center px-3">
-                      <span className="font-['Inter',sans-serif] text-[9px] text-[#2a2a32] tracking-wider truncate">
-                        ccawong.dev/{activeProject.title.toLowerCase().replace(/\s/g, "-")}
-                      </span>
-                    </div>
-                    <a
-                      href={activeProject.url}
-                      className="flex items-center gap-1.5 font-['Inter',sans-serif] text-[9px] tracking-[0.2em] uppercase text-[#3a3a46] hover:text-[#8a8a92] transition-colors duration-200 whitespace-nowrap"
-                    >
-                      Visit <ArrowUpRight size={9} />
-                    </a>
+              {/* Browser mockup window */}
+              <div className="relative flex-1 flex flex-col rounded-md overflow-hidden border border-[#22222a] bg-[#0c0c0f] shadow-2xl">
+                
+                {/* Browser address bar */}
+                <div className="flex items-center justify-between gap-3 px-4 py-2.5 bg-[#121216] border-b border-[#1e1e26] shrink-0">
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#282830]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#282830]" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-[#282830]" />
                   </div>
 
-                  {/* Viewport */}
-                  <div className="flex-1 border border-[#1e1e24] relative overflow-hidden bg-[#0a0a0c]/60">
+                  {/* URL Input */}
+                  <div
+                    onClick={() => handleProjectClick(activeProject.url)}
+                    className="flex-1 h-7 bg-[#0a0a0d] border border-[#22222c] mx-2 flex items-center px-3 justify-between rounded text-xs text-[#a1a1aa] font-['Inter',sans-serif] truncate cursor-pointer hover:border-[#333342] transition-colors"
+                    title="Click to open page"
+                  >
+                    <div className="flex items-center gap-2 truncate">
+                      <Globe size={12} className="text-[#8e8e9a] shrink-0" />
+                      <span className="truncate">
+                        {activeProject.url && activeProject.url.startsWith("http")
+                          ? activeProject.url
+                          : `https://curtiscullenawong.github.io/${activeProject.title.toLowerCase().replace(/\s/g, "-")}`}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-[#5a5a68] uppercase tracking-wider shrink-0 ml-2">
+                      GitHub Pages
+                    </span>
+                  </div>
+
+                  {/* Action Link */}
+                  {activeProject.url && activeProject.url !== "#" && (
+                    <a
+                      href={activeProject.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-xs font-['Inter',sans-serif] uppercase tracking-wider text-[#d0cecb] hover:text-white transition-colors shrink-0 px-2 py-1"
+                    >
+                      Visit <ArrowUpRight size={13} />
+                    </a>
+                  )}
+                </div>
+
+                {/* Viewport */}
+                <div
+                  className="flex-1 relative overflow-hidden bg-[#08080a] cursor-pointer"
+                  onClick={() => handleProjectClick(activeProject.url)}
+                >
+                  {activeProject.url && activeProject.url.startsWith("http") ? (
+                    <div className="w-full h-full relative">
+                      {!loadedIframes[activeProject.title] && (
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#0c0c0f] z-10 text-[#7a7a88] gap-3">
+                          <div className="w-5 h-5 border-2 border-[#2a2a38] border-t-[#c8c6c3] rounded-full animate-spin" />
+                          <span className="font-['Inter',sans-serif] text-xs tracking-wider uppercase">
+                            Loading Live Preview...
+                          </span>
+                        </div>
+                      )}
+                      <iframe
+                        src={activeProject.url}
+                        title={`${activeProject.title} Live Preview`}
+                        onLoad={() => handleIframeLoad(activeProject.title)}
+                        className="w-full h-full border-0 bg-white"
+                        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                      />
+                    </div>
+                  ) : (
                     <img
                       src={activeProject.preview}
                       alt={`${activeProject.title} website preview`}
-                      className="w-full h-full object-cover opacity-40 grayscale-[0.3]"
-                      style={{ filter: "grayscale(0.3) brightness(0.55)" }}
+                      className="w-full h-full object-cover opacity-70 grayscale-[0.1]"
                     />
-                    {/* Info overlay */}
-                    <div className="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-[#0a0a0c] to-transparent">
-                      <p className="font-['Cinzel',serif] text-[9px] tracking-[0.35em] text-[#2e2e38] uppercase mb-1">
-                        {activeProject.subtitle}
-                      </p>
-                      <h3 className="font-['Cinzel',serif] text-xl text-[#c8c6c3] tracking-wide mb-2">
-                        {activeProject.title}
-                      </h3>
-                      <div className="flex gap-3">
-                        {activeProject.tags.map((tag) => (
-                          <span key={tag} className="font-['Inter',sans-serif] text-[8px] tracking-[0.2em] uppercase text-[#2a2a34] border border-[#1c1c22] px-2 py-1">
-                            {tag}
-                          </span>
-                        ))}
+                  )}
+
+                  {/* Clean info overlay */}
+                  <div className="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-[#08080a] via-[#08080a]/90 to-transparent pointer-events-none z-20">
+                    <div className="pointer-events-auto flex items-end justify-between gap-4">
+                      <div>
+                        <p className="font-['Cinzel',serif] text-xs tracking-widest text-[#7a7a88] uppercase mb-1">
+                          {activeProject.subtitle}
+                        </p>
+                        <h3 className="font-['Cinzel',serif] text-xl text-white tracking-wide mb-2">
+                          {activeProject.title}
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {activeProject.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="font-['Inter',sans-serif] text-xs tracking-wider uppercase text-[#a1a1aa] border border-[#22222e] px-2.5 py-0.5 bg-[#121218]/90 rounded-sm"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
+
+                      {activeProject.url && activeProject.url.startsWith("http") && (
+                        <a
+                          href={activeProject.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-xs font-['Inter',sans-serif] text-[#c8c6c3] hover:text-white hover:underline flex items-center gap-1 uppercase tracking-wider shrink-0"
+                        >
+                          Open Site <ExternalLink size={12} />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="flex flex-col items-center justify-center gap-4 text-center px-12"
-              >
-                {/* Placeholder rune */}
-                <svg viewBox="0 0 80 80" className="w-16 h-16 opacity-10" aria-hidden>
-                  <circle cx="40" cy="40" r="36" fill="none" stroke="#e8e6e3" strokeWidth="0.6" />
-                  <circle cx="40" cy="40" r="22" fill="none" stroke="#e8e6e3" strokeWidth="0.4" />
-                  {[0, 90, 180, 270].map(d => {
-                    const a = d * Math.PI / 180;
-                    return <line key={d} x1="40" y1="40" x2={40 + Math.cos(a) * 36} y2={40 + Math.sin(a) * 36} stroke="#e8e6e3" strokeWidth="0.3" />;
-                  })}
-                  <circle cx="40" cy="40" r="4" fill="none" stroke="#e8e6e3" strokeWidth="0.4" />
-                </svg>
-                <p className="font-['Cinzel',serif] text-[10px] tracking-[0.4em] text-[#1e1e24] uppercase">
-                  Hover a project
-                </p>
-              </motion.div>
-            )}
+              </div>
+            </motion.div>
           </AnimatePresence>
         </div>
       </div>
@@ -205,3 +297,7 @@ export function ProjectLogs() {
 }
 
 export { ProjectLogs as QuestLog };
+
+
+
+

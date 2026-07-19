@@ -433,7 +433,7 @@ export function About() {
             <div className="relative pt-4 px-3 pb-3 overflow-visible">
               {/* Connecting line centered vertically relative to nodes — desktop only */}
               <div className="absolute top-[24px] left-4 right-4 h-px bg-[#1a1a20] z-0 hidden md:block" />
-              <div className="flex flex-col md:flex-row gap-6 md:overflow-x-auto scrollbar-hide relative z-10 pb-1">
+              <div className="flex flex-col md:flex-row gap-6 overflow-x-hidden scrollbar-hide relative z-10 pb-1">
                 {TIMELINE.map((entry, idx) => (
                   <div key={idx} className="flex-1 md:min-w-[210px] lg:min-w-[240px] group md:pr-2 border-l border-[#1a1a20] md:border-l-0 pl-4 md:pl-0">
                     {/* Node positioned above the connector line — desktop only */}

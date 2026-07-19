@@ -233,17 +233,6 @@ export function Hero() {
             className="relative w-[80vw] max-w-[400px] lg:w-full lg:max-w-[440px] aspect-square"
           >
             <CosmicRune className="absolute inset-0 w-full h-full" />
-
-            {/* Floating lore labels */}
-            <div className="absolute top-[10%] right-[12%] font-['Cinzel',serif] text-[7px] tracking-[0.4em] text-[#252530] uppercase">
-              SCHOLAR
-            </div>
-            <div className="absolute bottom-[12%] left-[14%] font-['Cinzel',serif] text-[7px] tracking-[0.4em] text-[#252530] uppercase">
-              ARCHITECT
-            </div>
-            <div className="absolute top-[45%] left-[2%] font-['Cinzel',serif] text-[7px] tracking-[0.4em] text-[#252530] uppercase rotate-[-90deg] origin-center">
-              ARTIFICER
-            </div>
           </motion.div>
         </div>
       </div>
