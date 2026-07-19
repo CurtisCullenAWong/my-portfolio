@@ -2,7 +2,7 @@
   "name": "@curtis-cullen-wong/design-portfolio",
   "private": true,
   "version": "0.0.1",
-  "homepage": "https://curtiscullenawong.github.io/",
+  "homepage": "https://CurtisCullenAWong.github.io/my-portfolio",
   "type": "module",
   "scripts": {
     "build": "vite build",
