@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Copy, Check, Eye, Download, ExternalLink, X, FileText } from "lucide-react";
+import {
+  Copy, Check, Eye, Download, ExternalLink, X, FileText,
+  Mail, Phone, MapPin, ArrowUpRight, Github, Linkedin
+} from "lucide-react";
 import { DEEDS, TOMES, FREELANCE_SERVICES } from "../../data/portfolioData";
 
-type Tab = "lore" | "deeds" | "codex" | "freelance";
+type Tab = "overview" | "directory" | "documents" | "services";
 
 export function Footer() {
-  const [activeTab, setActiveTab] = useState<Tab>("lore");
+  const [activeTab, setActiveTab] = useState<Tab>("overview");
   const [copiedItem, setCopiedItem] = useState<string | null>(null);
   const [previewPdf, setPreviewPdf] = useState<{ title: string; url: string } | null>(null);
 
@@ -33,320 +36,363 @@ Services Offered:
     handleCopy(cardData, "freelance-card");
   };
 
-  const options = [
-    { id: "lore", text: `"Tell me about your professional background."`, prefix: "[Background]" },
-    { id: "deeds", text: `"Where can I find your professional profiles?"`, prefix: "[Links]" },
-    { id: "codex", text: `"Access your resume and documents."`, prefix: "[Resources]" },
-    { id: "freelance", text: `"Preview freelance development service card."`, prefix: "[Services]" },
-  ] as const;
+  const tabs: { id: Tab; label: string }[] = [
+    { id: "overview", label: "Overview" },
+    { id: "directory", label: "Profiles & Links" },
+    { id: "documents", label: "Resume & Documents" },
+    { id: "services", label: "Freelance Services" },
+  ];
 
   return (
-    <footer id="contact" className="relative min-h-dvh lg:h-dvh py-4 sm:py-6 lg:py-4 px-4 md:px-8 xl:px-12 flex flex-col items-center justify-between lg:snap-start lg:snap-always shrink-0 select-none overflow-hidden">
-      {/* Night sky background */}
+    <footer
+      id="contact"
+      className="relative min-h-dvh lg:h-dvh w-full flex flex-col justify-between lg:snap-start lg:snap-always shrink-0 select-none overflow-hidden bg-[#0a0a0c] border-t border-[#1a1a22]"
+    >
+      {/* Soft Ambient Radial Background Glow */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1429305336325-b84ace7eba3b?w=2000&h=1400&fit=crop&auto=format"
-          alt="Night sky"
-          className="w-full h-full object-cover opacity-15 grayscale-[0.6]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0c] via-[#0a0a0c]/80 to-[#0a0a0c]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-[#1a1a2e]/20 blur-[140px] rounded-full" />
       </div>
 
-      {/* Stylized floating ember particles */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <style dangerouslySetInnerHTML={{
-          __html: `
-          @keyframes floatUp {
-            0% { transform: translateY(110vh) translateX(0) scale(1); opacity: 0; }
-            10% { opacity: 0.55; }
-            90% { opacity: 0.55; }
-            100% { transform: translateY(-10vh) translateX(45px) scale(0.5); opacity: 0; }
-          }
-        `}} />
-        {Array.from({ length: 8 }).map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 rounded-full bg-[#f97316]/30 blur-[1px]"
-            style={{
-              left: `${12 + i * 11 + Math.random() * 6}%`,
-              bottom: 0,
-              animation: `floatUp ${9 + i * 2}s linear infinite`,
-              animationDelay: `${i * 1.5}s`,
-            }}
-          />
-        ))}
-      </div>
-
-      <div className="relative z-10 w-full text-center mb-3 sm:mb-4 lg:mb-3 shrink-0">
-        <h2 className="font-['Cinzel',serif] text-lg sm:text-xl md:text-2xl text-[#e8e6e3] tracking-widest uppercase mb-1">
-          Contact Portal
-        </h2>
-        <div className="h-[1px] w-12 bg-[#333] mx-auto mb-1.5 sm:mb-2"></div>
-        <p className="font-['Inter',sans-serif] text-[#8b8b8b] text-[9px] sm:text-[10px] md:text-xs tracking-wide uppercase">
-          Connect with the developer.
-        </p>
-      </div>
-
-      {/* Skyrim RPG Interface Grid */}
-      <div className="relative z-10 w-full max-w-5xl flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-4 lg:gap-6 items-stretch my-auto overflow-y-auto lg:overflow-hidden">
-
-        {/* Left Column — Dialogue Options */}
-        <div className="border border-[#252530] bg-[#0c0c0e]/85 p-3.5 sm:p-4 md:p-5 flex flex-col gap-1.5 sm:gap-2 w-full lg:overflow-y-auto scrollbar-hide shrink-0 lg:shrink">
-          <div className="font-['Cinzel',serif] text-[10px] md:text-xs text-[#8a8a93] font-semibold tracking-[0.2em] uppercase mb-1 pb-1.5 border-b border-[#1c1c22] shrink-0">
-            Dialogue Choices
+      {/* FULL WIDTH TOP BAR / SECTION HEADER */}
+      <div className="px-6 md:px-12 xl:px-16 pt-6 sm:pt-8 md:pt-10 pb-4 border-b border-[#16161e] flex flex-col md:flex-row md:items-end justify-between gap-4 shrink-0 relative z-10">
+        <div>
+          <div className="flex items-center gap-3 mb-1">
+            <div className="w-2.5 h-2.5 bg-[#e8e6e3] rotate-45" />
+            <span className="font-['Inter',sans-serif] text-xs uppercase tracking-[0.3em] text-[#71717a]">
+              Connect & Details
+            </span>
           </div>
-          <div className="flex flex-col gap-1 sm:gap-1.5">
-            {options.map((opt) => {
-              const active = activeTab === opt.id;
-              return (
-                <button
-                  key={opt.id}
-                  onClick={() => setActiveTab(opt.id)}
-                  className="flex items-start gap-2.5 sm:gap-3 w-full text-left group transition-all duration-300 py-2 sm:py-2.5 px-3 border border-transparent hover:border-[#22222a] hover:bg-[#121217]/50 cursor-pointer"
+          <h2 className="font-['Cinzel',serif] text-2xl sm:text-3xl md:text-4xl text-[#e8e6e3] tracking-wide font-normal">
+            Contact & Profiles
+          </h2>
+        </div>
+
+        {/* Tab Selector Bar */}
+        <div className="flex items-center gap-1.5 bg-[#101016] border border-[#22222e] p-1 rounded-md overflow-x-auto scrollbar-hide shrink-0">
+          {tabs.map((tab) => {
+            const active = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-3.5 py-1.5 rounded text-xs font-['Inter',sans-serif] tracking-wider transition-all duration-200 cursor-pointer whitespace-nowrap ${
+                  active
+                    ? "bg-[#22222e] text-[#e8e6e3] font-medium shadow-sm"
+                    : "text-[#8a8a93] hover:text-[#e8e6e3] hover:bg-[#161620]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* MAIN BODY — FULL SCREEN FLEX-1 GRID */}
+      <div className="px-6 md:px-12 xl:px-16 py-6 md:py-8 flex-1 min-h-0 relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_1.35fr] gap-8 xl:gap-12 items-stretch overflow-y-auto lg:overflow-hidden">
+
+        {/* LEFT COLUMN — PROFILE & DIRECT CONTACT DETAILS */}
+        <div className="flex flex-col justify-between gap-6 overflow-y-auto scrollbar-hide">
+          <div className="space-y-4">
+            <div>
+              <p className="font-['Inter',sans-serif] text-xs text-[#8a8a93] uppercase tracking-[0.25em]">
+                Full-Stack Developer & Project Manager
+              </p>
+              <h3 className="font-['Cinzel',serif] text-2xl sm:text-3xl text-[#e8e6e3] font-medium tracking-wide mt-1">
+                Curtis Cullen A. Wong
+              </h3>
+            </div>
+
+            <p className="font-['Inter',sans-serif] text-sm md:text-base text-[#9a9aa5] leading-relaxed font-light">
+              Magna Cum Laude IT graduate specializing in full-stack web applications, cross-platform mobile development, and agentic AI systems. Committed to delivering production-ready, clean, scalable software solutions.
+            </p>
+
+            {/* Direct Contact Action Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div className="p-3.5 border border-[#1e1e28] bg-[#0e0e14] rounded-md space-y-2 group hover:border-[#3a3a4c] transition-all">
+                <div className="flex items-center justify-between text-[#8a8a93]">
+                  <span className="font-['Inter',sans-serif] text-[11px] uppercase tracking-wider">Email Address</span>
+                  <Mail size={14} className="group-hover:text-[#e8e6e3] transition-colors" />
+                </div>
+                <a
+                  href="mailto:curtiscullenagustinwong@gmail.com"
+                  className="font-['Inter',sans-serif] text-xs sm:text-sm font-medium text-[#e8e6e3] block truncate hover:underline"
                 >
-                  <span className={`pt-1 shrink-0 transition-opacity duration-300 ${active ? "opacity-100" : "opacity-0 group-hover:opacity-40"}`}>
-                    <div className="w-2.5 h-2.5 rotate-45 bg-[#e8e6e3] flex items-center justify-center">
-                      <div className="w-1 h-1 bg-[#0a0a0c] rotate-45" />
-                    </div>
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <span className="font-['Cinzel',serif] text-[9px] sm:text-[10px] md:text-[11px] font-semibold tracking-[0.2em] text-[#6e6e78] uppercase mr-2 sm:mr-2.5">
-                      {opt.prefix}
-                    </span>
-                    <span className={`font-['Cinzel',serif] text-xs sm:text-sm md:text-base tracking-wide transition-colors duration-300 block leading-tight ${active ? "text-[#e8e6e3] font-medium" : "text-[#8a8a93] group-hover:text-[#e8e6e3]"}`}>
-                      {opt.text}
-                    </span>
-                  </div>
+                  curtiscullenagustinwong@gmail.com
+                </a>
+                <button
+                  onClick={() => handleCopy("curtiscullenagustinwong@gmail.com", "left-email")}
+                  className="inline-flex items-center gap-1.5 text-[11px] text-[#71717a] hover:text-[#e8e6e3] transition-colors cursor-pointer"
+                >
+                  {copiedItem === "left-email" ? <Check size={12} className="text-[#10b981]" /> : <Copy size={12} />}
+                  <span>{copiedItem === "left-email" ? "Copied to clipboard" : "Copy email"}</span>
                 </button>
-              );
-            })}
+              </div>
+
+              <div className="p-3.5 border border-[#1e1e28] bg-[#0e0e14] rounded-md space-y-2 group hover:border-[#3a3a4c] transition-all">
+                <div className="flex items-center justify-between text-[#8a8a93]">
+                  <span className="font-['Inter',sans-serif] text-[11px] uppercase tracking-wider">Phone / Mobile</span>
+                  <Phone size={14} className="group-hover:text-[#e8e6e3] transition-colors" />
+                </div>
+                <a
+                  href="tel:+639994885479"
+                  className="font-['Inter',sans-serif] text-xs sm:text-sm font-medium text-[#e8e6e3] block hover:underline"
+                >
+                  (+63) 999-488-5479
+                </a>
+                <button
+                  onClick={() => handleCopy("+639994885479", "left-phone")}
+                  className="inline-flex items-center gap-1.5 text-[11px] text-[#71717a] hover:text-[#e8e6e3] transition-colors cursor-pointer"
+                >
+                  {copiedItem === "left-phone" ? <Check size={12} className="text-[#10b981]" /> : <Copy size={12} />}
+                  <span>{copiedItem === "left-phone" ? "Copied to clipboard" : "Copy phone number"}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Location & Status Card */}
+          <div className="p-4 border border-[#1a1a24] bg-[#0d0d12] rounded-md space-y-3">
+            <div className="flex items-center justify-between text-xs text-[#8a8a93]">
+              <div className="flex items-center gap-2">
+                <MapPin size={14} className="text-[#a1a1aa]" />
+                <span className="font-['Inter',sans-serif] tracking-wider uppercase">Parañaque City, PH</span>
+              </div>
+              <span className="text-[#10b981] font-medium tracking-wider uppercase text-[10px]">Open to Opportunities</span>
+            </div>
+            <p className="font-['Inter',sans-serif] text-xs text-[#71717a] leading-relaxed">
+              Available for full-time roles, freelance projects, or contract work. Responds to inquiries within 24 hours. Open to remote, hybrid, or on-site arrangements.
+            </p>
           </div>
         </div>
 
-        {/* Right Column — Response & Actions (Tabs) */}
-        <div className="border border-[#252530] bg-[#0c0c0e]/85 p-3.5 sm:p-4 md:p-5 w-full flex flex-col gap-3 lg:gap-4 overflow-y-auto overflow-x-hidden min-h-0 flex-1 max-h-full">
+        {/* RIGHT COLUMN — INTERACTIVE DISPLAY VIEW */}
+        <div className="flex flex-col justify-between overflow-y-auto scrollbar-hide pr-1">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
-              initial={{ opacity: 0, y: 6 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              className="flex flex-col"
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="flex-1 flex flex-col justify-center space-y-4"
             >
-              {/* Lore Tab */}
-              {activeTab === "lore" && (
-                <div className="space-y-4 flex flex-col">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-[#4b5563] rotate-45" />
-                      <h3 className="font-['Cinzel',serif] text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-[#8a8a93]">Professional Profile</h3>
-                    </div>
-                    <div className="border-l-2 border-[#3a3a46] pl-4 space-y-3">
-                      <p className="font-['Inter',sans-serif] text-sm md:text-base text-[#e8e6e3] leading-relaxed font-light">
-                        Available for freelance contracts, part-time, and full-time roles in web and mobile development.
-                      </p>
-                      <p className="font-['Inter',sans-serif] text-sm md:text-base text-[#a1a1aa] leading-relaxed font-light">
-                        Based in Parañaque, PH · Open to remote or on-site work · Responds within 24 hours.
-                      </p>
-                    </div>
+              {/* TAB 1: OVERVIEW */}
+              {activeTab === "overview" && (
+                <div className="space-y-4">
+                  <h3 className="font-['Cinzel',serif] text-lg text-[#e8e6e3] tracking-wide font-medium border-b border-[#1c1c26] pb-2">
+                    Professional Summary & Overview
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {[
+                      { label: "Primary Role", value: "Full-Stack Developer & Project Manager" },
+                      { label: "Location Base", value: "Parañaque City, Philippines" },
+                      { label: "Specializations", value: "Next.js, React Native, Supabase, AI Workflows" },
+                      { label: "Education & Distinction", value: "BS IT · Magna Cum Laude · Dean's Lister" },
+                      { label: "Availability", value: "Full-Time, Freelance, Contract" },
+                      { label: "Response Window", value: "Within 24 Hours" },
+                    ].map((item, idx) => (
+                      <div key={idx} className="p-3 border border-[#1a1a24] bg-[#0c0c12] rounded space-y-1">
+                        <span className="font-['Inter',sans-serif] text-[10px] uppercase tracking-wider text-[#71717a] block">
+                          {item.label}
+                        </span>
+                        <span className="font-['Inter',sans-serif] text-xs sm:text-sm font-medium text-[#e8e6e3] block">
+                          {item.value}
+                        </span>
+                      </div>
+                    ))}
                   </div>
 
-                  {/* Developer Stats Card */}
-                  <div className="border border-[#1e1e24] bg-[#0c0c0e]/40 p-3 sm:p-4 mt-1">
-                    <h4 className="font-['Cinzel',serif] text-xs font-semibold tracking-[0.25em] text-[#71717a] uppercase mb-2.5 pb-1 border-b border-[#18181f]">Developer Overview</h4>
-                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                      {[
-                        { label: "Profession", value: "Full-Stack Dev" },
-                        { label: "Base", value: "Parañaque, PH" },
-                        { label: "Focus Area", value: "AI, Web & Mobile Dev" },
-                        { label: "Soft skills", value: "Adaptable, Hardworking, Positive Mindset, Coachability" }
-                      ].map((stat) => (
-                        <div key={stat.label} className="flex flex-col gap-0.5">
-                          <span className="font-['Inter',sans-serif] text-[9px] sm:text-[10px] md:text-[11px] tracking-widest text-[#71717a] uppercase font-medium">{stat.label}</span>
-                          <span className="font-['Cinzel',serif] text-xs md:text-sm text-[#e8e6e3] tracking-wide leading-snug font-medium">{stat.value}</span>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="p-4 border border-[#1e1e2a] bg-[#0f0f16] rounded-md space-y-2">
+                    <h4 className="font-['Cinzel',serif] text-xs text-[#a1a1aa] uppercase tracking-wider font-semibold">
+                      Work Ethic & Soft Skills
+                    </h4>
+                    <p className="font-['Inter',sans-serif] text-xs md:text-sm text-[#9a9aa5] leading-relaxed">
+                      Adaptable, hardworking, and solution-driven with a positive mindset and strong coachability. Experienced in managing technical roadmaps from initial user design through architecture, database design, and cloud deployment.
+                    </p>
                   </div>
                 </div>
               )}
 
-              {/* Deeds Tab (Social Links) */}
-              {activeTab === "deeds" && (
-                <div className="space-y-4 flex flex-col">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-[#4b5563] rotate-45" />
-                    <h3 className="font-['Cinzel',serif] text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-[#8a8a93]">Professional Directory</h3>
-                  </div>
-                  <div className="space-y-2">
+              {/* TAB 2: PROFILES & LINKS */}
+              {activeTab === "directory" && (
+                <div className="space-y-3">
+                  <h3 className="font-['Cinzel',serif] text-lg text-[#e8e6e3] tracking-wide font-medium border-b border-[#1c1c26] pb-2">
+                    Professional Directory & Links
+                  </h3>
+                  <div className="space-y-2.5">
                     {DEEDS.map((deed, i) => (
-                      <div key={i} className="flex items-start gap-3 sm:gap-4 p-3 border border-[#1c1c22] bg-[#0c0c0e]/30 hover:bg-[#121217] hover:border-[#3a3a46] transition-all duration-300 group">
-                        <a
-                          href={deed.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-8 h-8 border border-[#222] flex items-center justify-center bg-[#111214] shrink-0 group-hover:border-[#4e4e5b] transition-colors"
-                        >
-                          {deed.icon}
-                        </a>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-baseline justify-between gap-2">
-                            <a href={deed.url} target="_blank" rel="noopener noreferrer" className="font-['Inter',sans-serif] text-sm md:text-base font-semibold tracking-wider text-[#e8e6e3] group-hover:text-white transition-colors truncate hover:underline underline-offset-2">{deed.name}</a>
-                            <span className="font-['Inter',sans-serif] text-[9px] sm:text-[10px] font-medium tracking-widest text-[#71717a] uppercase shrink-0">{deed.role}</span>
+                      <div
+                        key={i}
+                        className="flex items-center justify-between gap-4 p-3.5 border border-[#1a1a24] bg-[#0d0d14] hover:bg-[#12121c] hover:border-[#2e2e40] transition-all rounded-md group"
+                      >
+                        <div className="flex items-center gap-3.5 min-w-0">
+                          <div className="w-9 h-9 border border-[#222230] bg-[#12121a] flex items-center justify-center rounded shrink-0 group-hover:border-[#4e4e60] transition-colors">
+                            {deed.icon}
                           </div>
-                          <p className="font-['Inter',sans-serif] text-xs md:text-sm text-[#a1a1aa] leading-relaxed mt-0.5 font-light">{deed.desc}</p>
+                          <div className="min-w-0">
+                            <a
+                              href={deed.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-['Inter',sans-serif] text-sm font-medium text-[#e8e6e3] group-hover:text-white truncate block hover:underline"
+                            >
+                              {deed.name}
+                            </a>
+                            <p className="font-['Inter',sans-serif] text-xs text-[#8a8a93] truncate mt-0.5">
+                              {deed.desc}
+                            </p>
+                          </div>
                         </div>
-                        {deed.copyValue && (
-                          <button
-                            onClick={() => handleCopy(deed.copyValue!, `deed-${i}`)}
-                            title="Copy to clipboard"
-                            className="shrink-0 w-7 h-7 border border-[#1c1c22] flex items-center justify-center bg-[#0c0c10] hover:border-[#4e4e5b] hover:bg-[#121217] transition-all duration-200 cursor-pointer"
+
+                        <div className="flex items-center gap-2 shrink-0">
+                          {deed.copyValue && (
+                            <button
+                              onClick={() => handleCopy(deed.copyValue!, `deed-${i}`)}
+                              className="p-2 border border-[#222230] bg-[#12121a] text-[#71717a] hover:text-[#e8e6e3] hover:border-[#3a3a4c] rounded transition-all cursor-pointer"
+                              title="Copy to clipboard"
+                            >
+                              {copiedItem === `deed-${i}` ? <Check size={14} className="text-[#10b981]" /> : <Copy size={14} />}
+                            </button>
+                          )}
+                          <a
+                            href={deed.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 border border-[#222230] bg-[#12121a] text-[#71717a] hover:text-[#e8e6e3] hover:border-[#3a3a4c] rounded transition-all cursor-pointer"
+                            title="Visit link"
                           >
-                            {copiedItem === `deed-${i}`
-                              ? <Check size={12} className="text-[#6a8a6a]" />
-                              : <Copy size={12} className="text-[#71717a]" />}
-                          </button>
-                        )}
+                            <ArrowUpRight size={14} />
+                          </a>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Codex Tab (Resume/Resources) */}
-              {activeTab === "codex" && (
-                <div className="space-y-4 flex flex-col">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 bg-[#4b5563] rotate-45" />
-                    <h3 className="font-['Cinzel',serif] text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-[#8a8a93]">Resource Documents</h3>
-                  </div>
-                  <div className="space-y-2.5">
+              {/* TAB 3: RESUME & DOCUMENTS */}
+              {activeTab === "documents" && (
+                <div className="space-y-3">
+                  <h3 className="font-['Cinzel',serif] text-lg text-[#e8e6e3] tracking-wide font-medium border-b border-[#1c1c26] pb-2">
+                    Resume & Resource Documents
+                  </h3>
+                  <div className="space-y-3">
                     {TOMES.map((tome, i) => (
                       <div
                         key={i}
-                        className="flex flex-col md:flex-row md:items-center justify-between gap-3 p-3 border border-[#1c1c22] bg-[#0c0c0e]/30 hover:bg-[#121217] hover:border-[#3a3a46] transition-all duration-300"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border border-[#1a1a24] bg-[#0d0d14] hover:bg-[#12121c] hover:border-[#2e2e40] transition-all rounded-md"
                       >
-                        <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0">
-                          <div className="w-8 h-8 border border-[#222] flex items-center justify-center bg-[#111214] shrink-0">
+                        <div className="flex items-start gap-3.5 min-w-0">
+                          <div className="w-9 h-9 border border-[#222230] bg-[#12121a] flex items-center justify-center rounded shrink-0">
                             {tome.icon}
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-['Cinzel',serif] text-sm md:text-base font-semibold tracking-wider text-[#e8e6e3] truncate">{tome.name}</h4>
-                            <p className="font-['Inter',sans-serif] text-[9px] sm:text-[10px] font-medium tracking-widest text-[#71717a] uppercase leading-none mt-0.5">{tome.type}</p>
-                            <p className="font-['Inter',sans-serif] text-xs md:text-sm text-[#a1a1aa] leading-relaxed mt-1 font-light">{tome.desc}</p>
+                          <div className="min-w-0">
+                            <h4 className="font-['Cinzel',serif] text-sm font-semibold text-[#e8e6e3] truncate">
+                              {tome.name}
+                            </h4>
+                            <span className="font-['Inter',sans-serif] text-[10px] text-[#71717a] uppercase tracking-wider block mt-0.5">
+                              {tome.type}
+                            </span>
+                            <p className="font-['Inter',sans-serif] text-xs text-[#8a8a93] leading-relaxed mt-1 font-light">
+                              {tome.desc}
+                            </p>
                           </div>
                         </div>
 
-                        {(tome as any).pdfUrl ? (
-                          <div className="flex items-center gap-2 shrink-0">
-                            <button
-                              onClick={() => setPreviewPdf({ title: tome.name, url: (tome as any).pdfUrl })}
-                              className="font-['Inter',sans-serif] text-[11px] sm:text-xs font-medium tracking-[0.15em] uppercase py-1.5 px-3 border border-[#3a3a48] text-[#e8e6e3] hover:bg-[#e8e6e3] hover:text-[#0a0a0c] transition-colors text-center shrink-0 cursor-pointer bg-[#0c0c0e]/30 flex items-center gap-1.5"
-                            >
-                              <Eye size={12} />
-                              Preview
-                            </button>
+                        <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                          {(tome as any).pdfUrl ? (
+                            <>
+                              <button
+                                onClick={() => setPreviewPdf({ title: tome.name, url: (tome as any).pdfUrl })}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#2e2e3e] bg-[#14141e] text-xs text-[#e8e6e3] hover:bg-[#1e1e2c] hover:border-[#4e4e60] transition-all rounded cursor-pointer font-['Inter',sans-serif]"
+                              >
+                                <Eye size={13} />
+                                Preview
+                              </button>
+                              <a
+                                href={(tome as any).pdfUrl}
+                                download
+                                className="p-1.5 border border-[#222230] bg-[#12121a] text-[#71717a] hover:text-[#e8e6e3] hover:border-[#3a3a4c] rounded transition-all cursor-pointer"
+                                title="Download Document"
+                              >
+                                <Download size={14} />
+                              </a>
+                            </>
+                          ) : (
                             <a
-                              href={(tome as any).pdfUrl}
+                              href={tome.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="font-['Inter',sans-serif] text-[11px] sm:text-xs font-medium tracking-[0.15em] uppercase p-1.5 border border-[#252530] text-[#8a8a93] hover:text-[#e8e6e3] hover:border-[#4b5563] transition-colors shrink-0 cursor-pointer bg-[#0c0c0e]/30"
-                              title="Open in new tab"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 border border-[#2e2e3e] bg-[#14141e] text-xs text-[#e8e6e3] hover:bg-[#1e1e2c] hover:border-[#4e4e60] transition-all rounded cursor-pointer font-['Inter',sans-serif]"
                             >
-                              <ExternalLink size={12} />
+                              View GitHub <ExternalLink size={13} />
                             </a>
-                          </div>
-                        ) : (
-                          <a
-                            href={tome.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-['Inter',sans-serif] text-[11px] sm:text-xs font-medium tracking-[0.15em] uppercase py-1.5 px-3 border border-[#333] text-[#e8e6e3] hover:bg-[#e8e6e3] hover:text-[#0a0a0c] transition-colors text-center shrink-0 cursor-pointer bg-[#0c0c0e]/30"
-                          >
-                            {tome.action}
-                          </a>
-                        )}
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Freelance Services Card Tab */}
-              {activeTab === "freelance" && (
-                <div className="space-y-3 flex flex-col">
-                  <div className="flex items-center gap-3 pb-1 border-b border-[#1c1c22]">
-                    <div className="w-2 h-2 bg-[#4b5563] rotate-45" />
-                    <h3 className="font-['Cinzel',serif] text-xs md:text-sm font-semibold tracking-[0.3em] uppercase text-[#8a8a93]">
+              {/* TAB 4: FREELANCE SERVICES */}
+              {activeTab === "services" && (
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between border-b border-[#1c1c26] pb-2">
+                    <h3 className="font-['Cinzel',serif] text-lg text-[#e8e6e3] tracking-wide font-medium">
                       General Development Services
                     </h3>
+                    <button
+                      onClick={copyFreelanceCard}
+                      className="inline-flex items-center gap-1.5 text-xs font-['Inter',sans-serif] px-3 py-1 border border-[#2e2e3e] bg-[#14141e] text-[#e8e6e3] hover:bg-[#1e1e2c] transition-all rounded cursor-pointer"
+                    >
+                      {copiedItem === "freelance-card" ? (
+                        <>
+                          <Check size={12} className="text-[#10b981]" />
+                          <span>Card Info Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={12} />
+                          <span>Copy Service Summary</span>
+                        </>
+                      )}
+                    </button>
                   </div>
 
-                  <div className="space-y-2.5">
-                    {/* Developer Header Banner */}
-                    <div className="border border-[#1c1c22] bg-[#0c0c0e]/50 p-2.5 sm:p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
-                      <div>
-                        <h4 className="font-['Cinzel',serif] text-xs sm:text-sm md:text-base font-semibold text-[#e8e6e3] tracking-wider">
-                          {FREELANCE_SERVICES.developer.name}
-                        </h4>
-                        <p className="font-['Inter',sans-serif] text-[11px] sm:text-xs md:text-sm text-[#a1a1aa] font-light mt-0.5">
-                          {FREELANCE_SERVICES.developer.role} · {FREELANCE_SERVICES.developer.location}
-                        </p>
-                      </div>
-
-                      <button
-                        onClick={copyFreelanceCard}
-                        className="font-['Cinzel',serif] text-[10px] sm:text-xs font-medium tracking-[0.15em] uppercase py-1 px-3 border border-[#252530] text-[#8a8a93] hover:text-[#e8e6e3] hover:border-[#4b5563] transition-colors shrink-0 cursor-pointer bg-[#0c0c0e]/30 flex items-center gap-1.5"
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {FREELANCE_SERVICES.services.map((srv, i) => (
+                      <div
+                        key={i}
+                        className="p-3.5 border border-[#1a1a24] bg-[#0d0d14] hover:bg-[#12121c] hover:border-[#2e2e40] transition-all rounded-md space-y-2 flex flex-col justify-between"
                       >
-                        {copiedItem === "freelance-card" ? (
-                          <>
-                            <Check size={12} className="text-[#6a8a6a]" />
-                            <span>Card Copied</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy size={12} />
-                            <span>Copy Card Info</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-
-                    {/* Responsive 2-Column Grid of Services */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
-                      {FREELANCE_SERVICES.services.map((srv, i) => (
-                        <div
-                          key={i}
-                          className="p-3 border border-[#1c1c22] bg-[#0c0c0e]/30 hover:bg-[#121217] hover:border-[#3a3a46] transition-all duration-300 group flex flex-col justify-between space-y-2"
-                        >
-                          <div className="space-y-1.5">
-                            <div className="flex items-center gap-2">
-                              <div className="w-7 h-7 border border-[#222] flex items-center justify-center bg-[#111214] shrink-0 group-hover:border-[#4e4e5b] transition-colors">
-                                {srv.icon}
-                              </div>
-                              <h4 className="font-['Cinzel',serif] text-xs md:text-sm font-semibold tracking-wider text-[#e8e6e3]">
-                                {srv.title}
-                              </h4>
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-7 h-7 border border-[#222230] bg-[#12121a] flex items-center justify-center rounded shrink-0">
+                              {srv.icon}
                             </div>
-                            <p className="font-['Inter',sans-serif] text-[11px] sm:text-xs md:text-sm text-[#a1a1aa] leading-relaxed font-light">
-                              {srv.desc}
-                            </p>
+                            <h4 className="font-['Cinzel',serif] text-sm font-semibold text-[#e8e6e3]">
+                              {srv.title}
+                            </h4>
                           </div>
-                          {/* Tech Stack Bar */}
-                          <div className="flex flex-wrap gap-1 pt-1.5 border-t border-[#181822]">
-                            {srv.stack.map((tech, tIdx) => (
-                              <span
-                                key={tIdx}
-                                className="font-['Inter',sans-serif] text-[9px] sm:text-[10px] md:text-[11px] font-medium tracking-wide text-[#71717a] bg-[#121218] px-1.5 py-0.5 rounded-xs border border-[#1a1a24]"
-                              >
-                                {tech}
-                              </span>
-                            ))}
-                          </div>
+                          <p className="font-['Inter',sans-serif] text-xs text-[#8a8a93] leading-relaxed font-light">
+                            {srv.desc}
+                          </p>
                         </div>
-                      ))}
-                    </div>
+
+                        <div className="flex flex-wrap gap-1 pt-2 border-t border-[#161622]">
+                          {srv.stack.map((tech, tIdx) => (
+                            <span
+                              key={tIdx}
+                              className="font-['Inter',sans-serif] text-[10px] text-[#71717a] bg-[#121218] px-2 py-0.5 rounded border border-[#1c1c28]"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
@@ -356,23 +402,41 @@ Services Offered:
 
       </div>
 
-      {/* Social anchors & copyright at base */}
-      <div className="flex items-center gap-4 sm:gap-6 mt-3 sm:mt-4 lg:mt-3 font-['Cinzel',serif] text-xs md:text-sm tracking-widest uppercase text-[#71717a] shrink-0 relative z-10">
-        <a href="https://github.com/CurtisCullenAWong" target="_blank" rel="noopener noreferrer" className="hover:text-[#e8e6e3] transition-colors duration-200 cursor-pointer">
-          GitHub
-        </a>
-        <span className="text-[#202025]">•</span>
-        <a href="https://www.linkedin.com/in/curtis-cullen-wong-3a9434367" target="_blank" rel="noopener noreferrer" className="hover:text-[#e8e6e3] transition-colors duration-200 cursor-pointer">
-          LinkedIn
-        </a>
-        <span className="text-[#202025]">•</span>
-        <a href="mailto:curtiscullenagustinwong@gmail.com" className="hover:text-[#e8e6e3] transition-colors duration-200 cursor-pointer">
-          Email
-        </a>
-      </div>
+      {/* FULL WIDTH BOTTOM BAR / FOOTER LINKS & COPYRIGHT */}
+      <div className="px-6 md:px-12 xl:px-16 py-4 border-t border-[#16161e] bg-[#08080a] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0 relative z-10 text-xs font-['Inter',sans-serif] text-[#71717a]">
+        <div className="flex items-center gap-5">
+          <a
+            href="https://github.com/CurtisCullenAWong"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-[#e8e6e3] transition-colors"
+          >
+            <Github size={13} />
+            <span>GitHub</span>
+          </a>
+          <span className="text-[#22222e]">•</span>
+          <a
+            href="https://www.linkedin.com/in/curtis-cullen-wong-3a9434367"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 hover:text-[#e8e6e3] transition-colors"
+          >
+            <Linkedin size={13} />
+            <span>LinkedIn</span>
+          </a>
+          <span className="text-[#22222e]">•</span>
+          <a
+            href="mailto:curtiscullenagustinwong@gmail.com"
+            className="flex items-center gap-1.5 hover:text-[#e8e6e3] transition-colors"
+          >
+            <Mail size={13} />
+            <span>Email</span>
+          </a>
+        </div>
 
-      <div className="mt-2 sm:mt-2.5 text-center text-[#404046] font-['Inter',sans-serif] text-[9px] sm:text-[10px] uppercase tracking-widest shrink-0 relative z-10">
-        <p>&copy; {new Date().getFullYear()} Curtis C. A. Wong. All rights reserved.</p>
+        <div className="text-center sm:text-right text-[#525260] tracking-wider uppercase text-[10px]">
+          <span>&copy; {new Date().getFullYear()} Curtis C. A. Wong. All rights reserved.</span>
+        </div>
       </div>
 
       {/* PDF Inline Preview Modal */}
@@ -383,7 +447,7 @@ Services Offered:
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
               className="relative w-full max-w-5xl h-[85vh] flex flex-col bg-[#0c0c0f] border border-[#252532] rounded-md shadow-2xl overflow-hidden"
             >
               {/* Modal Header Bar */}
